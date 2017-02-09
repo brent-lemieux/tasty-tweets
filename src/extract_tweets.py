@@ -39,8 +39,4 @@ def get_tweets(topics, save_file_name,num_batches=25): # num_batches * 100 is to
 
 
 if __name__ == '__main__':
-    get_tweets(['chipotle', 'mcdonalds', 'starbucks'], 'food/food0209c', 100)
-    # get_tweets(['noodles', 'ibotta', 'vail', 'trulia', 'otterbox', 'chaco'], 'denver/cos0207a', 100)
-    # get_tweets(superb, 'sb/sb0205', 100)
-    # get_tweets(['#maga'], 'data/trump_tweets_0201', 5)
-    # get_tweets('economy', 'financial_tweets/econ_tweets_0124c', 50)
+    get_tweets(['chipotle', 'mcdonalds', 'starbucks'], '../food/food0209c', 100)

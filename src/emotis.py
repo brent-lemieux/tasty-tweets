@@ -1,6 +1,5 @@
 import re
 import pickle
-from collections import defaultmap_dict
 import os
 # from sys import argv
 import pandas as pd
