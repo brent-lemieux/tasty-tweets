@@ -2,7 +2,7 @@ import csv
 from clean_tweets import clean_pipeline
 from random import shuffle
 
-tweets = clean_pipeline('../food')[:1000]
+tweets = clean_pipeline('../../tweets/food')[:1000]
 shuffle(tweets)
 
 def to_csv(filename):
@@ -13,4 +13,4 @@ def to_csv(filename):
 
 if __name__ == '__main__':
     print '# of tweets', len(tweets)
-    to_csv('../csv/food-1a.csv')
+    to_csv('../../tweets/csv/food-1a.csv')
