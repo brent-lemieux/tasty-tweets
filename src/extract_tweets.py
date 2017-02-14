@@ -31,7 +31,7 @@ def get_tweets(topics, save_file_name,num_batches=25): # num_batches * 100 is to
                 time.sleep(35)
             except:
                 print 'Waiting for API to allow more calls...'
-                time.sleep(60)
+                time.sleep(10)
                 pass
     pickle.dump( tweets, open( "{}.pkl".format(save_file_name), "wb" ) )
     print 'Succesfully pickled', len(tweets), 'tweets!'
@@ -39,4 +39,6 @@ def get_tweets(topics, save_file_name,num_batches=25): # num_batches * 100 is to
 
 
 if __name__ == '__main__':
-    get_tweets(['chipotle', 'mcdonalds', 'starbucks'], '../food/food0209c', 100)
+
+    get_tweets(['economy', 'market', 'retirement'], '../econ/econ0214a', 50)
+    get_tweets(['chipotle', 'mcdonalds', 'starbucks'], '../food/food0214c', 50)
