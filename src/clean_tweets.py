@@ -8,7 +8,10 @@ from emotis import replace_emoji, map_dic
 def load_tweets(dirname):
     tweets = []
     for pkl_file in os.listdir(dirname):
-        tweets += list(pickle.load( open('{}/{}'.format(dirname,pkl_file), 'rb')))
+        try:
+            tweets += list(pickle.load( open('/{}/{}'.format(dirname,pkl_file), 'rb')))
+        except:
+            print str(pkl_file)
     return list(set(tweets))
 
 def clean_tweets(tweets):
