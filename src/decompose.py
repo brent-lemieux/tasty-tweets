@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.decomposition import LatentDirichletAllocation
+from sklearn.decomposition import LatentDirichletAllocation, NMF
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 
 # load and drop NaNs
@@ -44,15 +44,23 @@ def decompose(model, train, test, feature_names):
     test_preds = np.argmax(test_dist_preds, axis=1)
     return train_preds, test_preds
 
+def topic_summaries(df, test_preds, mod_name):
+    df['topics'] = test_preds.tolist()
+    file_dir = '../../tweets/topic_dfs/{}_topic_preds.csv'.format(mod_name)
+    df.to_csv(file_dir)
+    topic_df = pd.read_csv(file_dir)
+    summary = topic_df.groupby('topics')['labels'].mean()
+    count = topic_df.groupby(['topics','labels']).count()
+    return summary, count
 
 if __name__ == '__main__':
     train = sbux_train.values.reshape(sbux_train.values.shape[0],)
     test = sbux_test['tweets'].values.reshape(sbux_test.values.shape[0],)
     train, test, feature_names = tfidf(train, test)
     lda = LatentDirichletAllocation(n_topics=n_topics, learning_method='online', learning_offset=50.)
-    train_preds, test_preds = decompose(lda, train, test, feature_names)
-    sbux_test['topics'] = test_preds.tolist()
-    sbux_test.to_csv('../../tweets/topic_dfs/lda_topic_preds.csv')
-    topic_df = pd.read_csv('../../tweets/topic_dfs/lda_topic_preds.csv')
-    summary = topic_df.groupby('topics')['labels'].mean()
-    count = topic_df.groupby(['topics','labels']).count()
+    nmf = NMF(n_components=n_topics, init='random')
+    ###############################################
+    model = nmf # Set model here
+    ###############################################
+    train_preds, test_preds = decompose(model, train, test, feature_names)
+    summary, count = topic_summaries(sbux_test, test_preds, mod_name='nmf')
