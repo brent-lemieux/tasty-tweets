@@ -3,7 +3,7 @@ from string import punctuation
 from string import printable
 import os
 from emotis import replace_emoji, map_dic
-### consider using fuzzywuzzy in cleaning pipeline
+
 
 def load_tweets(dirname):
     tweets = []
@@ -35,7 +35,7 @@ def cleaner_tweets(tweets):
                 clean_tweet.append(word)
         cleaner_tweets.append(' '.join(clean_tweet))
     cleaner_tweets = [' '.join(tweet.split('\n')) for tweet in cleaner_tweets]
-    cleaner_tweets = [' '.join(tweet.split('amp')) for tweet in cleaner_tweets]
+    cleaner_tweets = [' '.join(tweet.split(' amp ')) for tweet in cleaner_tweets]
     return cleaner_tweets
 
 

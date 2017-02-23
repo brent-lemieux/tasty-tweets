@@ -14,7 +14,7 @@ def to_csv(filename, tweets):
 
 if __name__ == '__main__':
     print '# of tweets', len(tweets)
-    test = tweets[:10000]
-    to_csv('../../tweets/csv/test.csv', test)
-    train = tweets[10000:]
-    to_csv('../../tweets/csv/train.csv', train)
+    test = tweets[:3000]
+    to_csv('../../tweets/csv/test2.csv', test)
+    train = tweets[3000:]
+    to_csv('../../tweets/csv/train2.csv', train)
