@@ -1,5 +1,6 @@
 from to_csv import to_csv
 from clean_tweets import clean_pipeline
+from load_and_process import load_csv
 import pandas as pd
 import os
 
@@ -35,13 +36,19 @@ def combine_data(csv_path):
                 pass
     init_df.dropna(inplace=True)
     init_df['date'] = init_df['date'].map(lambda x: str(x)[:10])
-    init_df.to_csv('/Users/blemieux/projects/tweets/master.csv')
+    init_df.to_csv('/Users/blemieux/projects/tweets/csv/master.csv')
     print "Success!"
     return init_df
 
+
+def process_master(read_f_path, wrie_f_path):
+    df = load_csv(read_f_path, lemma=True, slang=True)
+    df = df[['date', 'tweets']]
+    df.to_csv(wrie_f_path)
 
 
 
 if __name__ == '__main__':
     # load_periods(path)
-    df = combine_data(csv_path)
+    # df = combine_data(csv_path)
+    process_master('/Users/blemieux/projects/tweets/master.csv', '/Users/blemieux/projects/tweets/clean_master.csv')

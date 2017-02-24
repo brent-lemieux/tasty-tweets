@@ -107,32 +107,40 @@ p49
 sS' dope '
 p50
 g15
-sS' greenheart '
+sS' som1 '
 p51
-g4
-sS' purpleheart '
+S' someone '
 p52
+sS' greenheart '
+p53
+g4
+sS' tryna '
+p54
+S' trying '
+p55
+sS' purpleheart '
+p56
 g4
 sS' ok '
-p53
+p57
 S' okay '
-p54
+p58
 sS' yellowheart '
-p55
+p59
 g4
 sS' wtf '
-p56
+p60
 S' what the fuck '
-p57
+p61
 sS' bro '
-p58
+p62
 g40
 sS' guac '
-p59
+p63
 S' guacamole '
-p60
+p64
 sS' idc '
-p61
+p65
 S' i dont care '
-p62
+p66
 s.

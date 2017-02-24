@@ -39,5 +39,5 @@ def get_tweets(topics, save_file_name,num_batches=25): # num_batches * 100 is to
 
 
 if __name__ == '__main__':
-    get_tweets(['chipotle', 'mcdonalds', 'starbucks'], '../../tweets/food/food0222c', 100)
+    get_tweets(['chipotle', 'mcdonalds', 'starbucks'], '../../tweets/food/food0223b', 100)
     # get_tweets(['economy', 'market', 'wall st', 'stocks'], '../../tweets/econ/econ0219a', 30)

@@ -1,3 +1,5 @@
+# load, convert slang, lemmatize, pos tag
+
 import pandas as pd
 import spacy
 from sklearn.feature_extraction.stop_words import ENGLISH_STOP_WORDS
@@ -11,7 +13,7 @@ if not 'nlp' in locals():
     nlp = spacy.load('en')
     print "Module loading complete."
 
-extra_stop = ['st', 'rd', 'ave', 'hiring', 'jobs']
+extra_stop = ['st', 'rd', 'ave']
 
 def load_xls(f, lemma=False, pos=False, slang=False):
     df = pd.read_excel(f)
@@ -29,13 +31,16 @@ def load_xls(f, lemma=False, pos=False, slang=False):
 def load_csv(f, lemma=False, pos=False, slang=False):
     df = pd.read_csv(f)
     df.dropna(inplace=True)
-    if df.columns.tolist()[0] != 'tweets':
-        df.columns = ['tweets']
+    if 'tweets' not in df.columns.tolist():
+        df.columns = ['index', 'date', 'tweets']
     if slang:
+        print 'Cleaning up slang...'
         df['tweets'] = df['tweets'].map(convert_slang)
     if lemma and pos:
+        print 'Lemmatizing and part of speech tagging...'
         df['tweets'] = df['tweets'].map(lemm_pos_string)
     elif lemma:
+        print 'Lemmatizing tweets'
         df['tweets'] = df['tweets'].map(lemm_string)
     return df
 

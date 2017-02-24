@@ -13,7 +13,7 @@ The focus of this project is to answer the questions above for three popular foo
 * Unsupervised learning to cluster tweets into latent topics
     * **Latent Semantic Analysis** - This method will use tf-idf document representation models.
     * **Latent Dirichlet Allocation** - This method will also use a term frequency vectorizer.
-    * **Non-Negative Factorization** - This method will also use tf-idf.
+    * **Non-Negative Matrix Factorization** - This method will also use tf-idf.
     * **Deep Autoencoder Topic Model  [(DATM)](https://www.prhlt.upv.es/workshops/iwes15/pdf/iwes15-kumar-d'haro.pdf "DATM")** - This method will make use of word embeddings to relate words used in similar context with one another.
 * Supervised and semi-supervised learning to classify sentiment of tweets in relation to brand
     * **Supervised** - Hand label a subset of tweets and use various machine learning algorithms to classify sentiment .
