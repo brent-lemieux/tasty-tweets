@@ -1,4 +1,4 @@
-# Tweety
+# Tasty Tweets
 Topic modeling and sentiment analysis of popular food and beverage chains on Twitter using Natural Language Processing and Machine Learning
 
 ## Project Introduction
