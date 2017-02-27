@@ -1,5 +1,7 @@
-import pickle
+# Create and pickle a dictionary that maps twitter
+# slang to "proper" english
 
+import pickle
 
 twitter_speak = {' af ':' as fuck ',
                 ' rn':' right now ',
@@ -39,7 +41,8 @@ twitter_speak = {' af ':' as fuck ',
                 ' heartpulse ':' heart ',
                 ' kissingheart ':' heart ',
                 ' tryna ':' trying ',
-                ' som1 ':' someone '
+                ' som1 ':' someone ',
+                ' tf ':' the fuck '
                 }
 
 pickle.dump( twitter_speak, open( 'twitter_speak.pkl', 'wb' ) )

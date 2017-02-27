@@ -1,18 +1,20 @@
-# the source for most of this code is:
-# http://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_silhouette_analysis.html
-from __future__ import division
+# This script plots reconstruction error for
+# the decomposition model in order to determine
+# the optimal number of topics
 
-from sklearn.decomposition import LatentDirichletAllocation, NMF, TruncatedSVD
+from sklearn.decomposition import NMF
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm
+import seaborn as sns
 import numpy as np
 import pandas as pd
 
 data = pd.read_csv('/Users/blemieux/projects/tweets/csv/clean_master.csv')
 
-sbux = data[data['tweets'].str.contains('starbucks')]
+company = 'starbucks'
+
+df = data[data['tweets'].str.contains(company)]
 
 
 # Set tfidf/bow and decomposition parameters
@@ -24,7 +26,7 @@ n_top_words = 10
 
 
 tf = TfidfVectorizer(max_features=n_features, ngram_range=ngrams, max_df=max_df, min_df=min_df, stop_words='english')
-X = tf.fit_transform(sbux['tweets']).todense()
+X = tf.fit_transform(df['tweets']).todense()
 feature_names = tf.get_feature_names()
 
 
@@ -36,24 +38,41 @@ def print_top_words(model, feature_names, n_top_words):
         print(", ".join([feature_names[i]
                         for i in topic.argsort()[:-n_top_words - 1:-1]]))
 
-range_n_clusters = range(5,25)
 
-for n_clusters in range_n_clusters:
-    print n_clusters, 'Clusters'
-    # Initialize the model with n_clusters value and a random generator
-    # seed of 4 for reproducibility.
-    # Create a number of models to test out
-    lda = LatentDirichletAllocation(n_topics=n_clusters, learning_method='online', learning_offset=50., random_state=4)
-    nmf = NMF(n_components=n_clusters, init='random', random_state=4)
-    lsa = TruncatedSVD(n_components=n_clusters, algorithm='randomized', random_state=4)
+def find_k_clusters(ks, tf, X):
+    recon_errors = []
+    for k_clusters in ks:
+        print k_clusters, 'Clusters'
+        # Initialize the model with n_clusters value and a random generator
+        # seed of 4 for reproducibility.
+        # Create a number of models to test out
+        nmf = NMF(n_components=k_clusters, init='random', random_state=4)
+        #############################################
+        model = nmf # Set model here
+        mod_name = 'nmf'
+        #############################################
+        model.fit(X)
+        labs = model.transform(X)
+        recon_errors.append(model.reconstruction_err_)
+        print 'Recontruction Error for', k_clusters, 'Latent Topics =', model.reconstruction_err_
+    sns.set_style("darkgrid")
+    plt.plot(ks, recon_errors, lw=3 )
+    plt.title('{} RECONSTRUCTION ERROR FOR EACK K CLUSTERS'.format(company.upper()))
+    plt.xlabel('k Clusters')
+    plt.ylabel('Recontruction Error')
+    plt.savefig('../plots/{}_n_cluster_finder.png'.format(company))
+    plt.close('all')
+    return ks[np.argmin(recon_errors)]
 
-    ###############################################
-    model = nmf # Set model here
-    mod_name = 'nmf'
-    ###############################################
+def heat_map(k, X):
+    nmf = NMF(n_components=k, init='random', random_state=4)
+    dists = nmf.fit_transform(X)
+    sns.heatmap(dists[:50,:])
+    plt.show()
 
-    model.fit(X)
 
-    labs = model.transform(X)
-
-    print 'Recontruction Error for', n_clusters, 'Latent Topics =', model.reconstruction_err_
+if __name__ == '__main__':
+    plt.close('all')
+    ks = range(10,31)
+    k = find_k_clusters(ks, tf, X)
+    # heat_map(18, X)

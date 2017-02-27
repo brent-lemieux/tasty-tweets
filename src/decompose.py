@@ -4,31 +4,28 @@ import pandas as pd
 from sklearn.decomposition import LatentDirichletAllocation, NMF, TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from load_and_process import load_xls
-
+import pickle
 
 
 train = pd.read_csv('/Users/blemieux/projects/tweets/csv/clean_master.csv')
 
 
-test = load_xls('../../tweets/csv/test1.xls', slang=True, lemma=True)
-
-
 # segment data by company
 # Starbucks
 sbux_train = train[train['tweets'].str.contains('starbucks')]
-sbux_test = test[test['tweets'].str.contains('starbucks')]
+sbux_test = load_xls('../../tweets/csv/starbucks_1.xls', slang=True, lemma=True)
 # # Chipotle
 # cmg_train = train[train['tweets'].str.contains('chipotle')]
-# cmg_test = test[test['tweets'].str.contains('chipotle')]
+# cmg_test = load_xls('../../tweets/csv/chipotle_1.xls', slang=True, lemma=True)
 # # McDonalds
 # mcd_train = train[train['tweets'].str.contains('mcdonalds')]
-# mcd_test = test[test['tweets'].str.contains('mcdonalds')]
+# mcd_test = load_xls('../../tweets/csv/mcdonalds_1.xls', slang=True, lemma=True)
 
-n_features = 200
+n_features = 400
 ngrams = [1,3]
 max_df = .5
-min_df = .03
-n_topics = 20
+min_df = .01
+n_topics = 18
 n_top_words = 10
 
 
@@ -50,7 +47,7 @@ def tfidf(train, test):
 
 def decompose(model, train, test, tf):
     feature_names = tf.get_feature_names()
-    model.fit(train)
+    # model.fit(train)
     print_top_words(model, feature_names, n_top_words)
     train_dist_preds = model.transform(train)
     train_preds = np.argmax(train_dist_preds, axis=1)
@@ -66,6 +63,7 @@ def topic_summaries(df, test_preds, mod_name):
     topic_df = pd.read_csv(file_dir)
     summary = topic_df.groupby('topic')['labels'].agg(['mean', 'std','count'])
     summary['pct_of_tweets'] = summary['count'] / len(df)
+    count = df.groupby('topic')['tweets'].count()
     print summary[['mean', 'std', 'pct_of_tweets']]
     return summary, topic_df
 
@@ -77,9 +75,9 @@ def drill_topics(df, train_preds, mod1, labeled_df):
     for topic in unique:
         top = topic_df[topic_df['topic']==topic]
         labeled = labeled_df[labeled_df['topic']==topic]
-        tf = TfidfVectorizer(max_features=n_features, max_df=.5, stop_words='english')
+        tf = TfidfVectorizer(max_features=n_features, max_df=max_df, min_df=min_df, stop_words='english')
         vecs = tf.fit_transform(top['tweets'])
-        nmf = NMF(n_components=3, init='random')
+        nmf = NMF(n_components=2, init='random')
         nmf.fit(vecs)
         top['sub_top'] = np.argmax(nmf.transform(vecs), axis=1).tolist()
         drilled_topics.append(top)
@@ -101,7 +99,9 @@ if __name__ == '__main__':
     nmf = NMF(n_components=n_topics, init='random')
     lsa = TruncatedSVD(n_components=n_topics, algorithm='randomized')
     ###############################################
-    model = nmf # Set model here
+    # model = nmf # Set model here
+    # load model
+    model = pickle.load(open('../models/sbux_nmf3.pkl', 'rb'))
     mod_name = 'nmf'
     ###############################################
     train_preds, test_preds, model = decompose(model, train, test, tf)
@@ -110,3 +110,5 @@ if __name__ == '__main__':
     # UPDATE COMPANY HERE
     topics_model = sbux_train
     drilled = drill_topics(topics_model, train_preds, model, topics_df)
+    # Pickle Starbucks Model
+    # pickle.dump(model, open('../models/sbux_{}3.pkl'.format(mod_name), 'wb'))
