@@ -18,9 +18,6 @@ def load_periods(base_path):
         df.to_csv('{}/{}tweets.csv'.format(csv_path,date))
 
 
-
-
-
 def combine_data(csv_path):
     init_df = pd.read_csv('{}/2017-01-27tweets.csv'.format(csv_path), index_col=0)
     for f in os.listdir(csv_path)[2:]:
@@ -50,5 +47,5 @@ def process_master(read_f_path, wrie_f_path):
 
 if __name__ == '__main__':
     # load_periods(path)
-    # df = combine_data(csv_path)
-    process_master('/Users/blemieux/projects/tweets/master.csv', '/Users/blemieux/projects/tweets/clean_master.csv')
+    df = combine_data(csv_path)
+    process_master('/Users/blemieux/projects/tweets/csv/master.csv', '/Users/blemieux/projects/tweets/csv/clean_masterf.csv')

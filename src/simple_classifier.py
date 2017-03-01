@@ -17,36 +17,25 @@ def format_labels(lab, predict=0): # predict == 2 if trying to predict positive
         lab = 0
     return lab
 
-def sentiment_model(tweet):
-    sent, subj = sentiment(tweet)
-    if sent > .2:
-        rating = 2
-    elif sent >= -.2 and sent <= .2:
-        rating = 1
-    else:
-        rating = 0
-    return rating
 
 
 if __name__ == '__main__':
     df = load_xls('../../tweets/csv/test1.xls', slang=False, lemma=True, pos=False)
-    df['sentiment'] = df['tweets'].map(sentiment_model)
+    df2 = load_xls('../../tweets/csv/test2.xls', slang=False, lemma=True, pos=False)
+    df = pd.concat([df, df2])
     X = df['tweets'].values
     df['labels'] = df['labels'] - 1
     y = df['labels'].values
     X_train, X_test, y_train, y_test = train_test_split(X, y)
-    tf = TfidfVectorizer(stop_words='english', max_features=200, ngram_range=[1,2])
+    tf = TfidfVectorizer(stop_words='english', min_df=.005, ngram_range=[1,2])
     X_train = tf.fit_transform(X_train).todense()
     X_test = tf.transform(X_test).todense()
 
-    # model = RandomForestClassifier()
-    # model.fit(X_train, y_train)
-    # preds = model.predict(X_test)
-    # print 'Accuracy       Precision      Recall'
-    # print accuracy_score(y_test, preds), precision_score(y_test, preds), recall_score(y_test, preds)
+    rfc = RandomForestClassifier()
+    gbc = GradientBoostingClassifier(learning_rate=.5)
+    mnb = MultinomialNB()
 
-
-    mod = OneVsRestClassifier(GradientBoostingClassifier(learning_rate=.5)).fit(X_train, y_train)
+    mod = OneVsRestClassifier(rfc).fit(X_train, y_train)
     preds = mod.predict(X_test)
     target_names = ['Negative', 'Neutral', 'Positive']
     print classification_report(y_test, preds, target_names=target_names)
@@ -54,9 +43,8 @@ if __name__ == '__main__':
     correct = [x for x in comps if x[0]==x[1]]
     way_off = [x for x in comps if abs(x[0] - x[1]) == 2]
     negs = [x for x in comps if x[0]==0]
+    guessed_negs = [x for x in comps if x[1]==0]
     missed_negs = [x for x in comps if x[0]==0 and x[1]!=0]
     print 'Correct:', len(correct) / len(comps)
     print 'Way off:', len(way_off) / len(comps)
-    sent_guess = df['sentiment'].values
-
-    print classification_report(y, sent_guess)
+    print '# of negatives:', len(negs), ', # of guessed negatives:', len(guessed_negs)

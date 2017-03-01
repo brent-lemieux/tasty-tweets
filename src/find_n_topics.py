@@ -18,10 +18,10 @@ df = data[data['tweets'].str.contains(company)]
 
 
 # Set tfidf/bow and decomposition parameters
-n_features = 200
+n_features = 1000
 ngrams = [1,3]
 max_df = .5
-min_df = .03
+min_df = .01
 n_top_words = 10
 
 
@@ -64,15 +64,8 @@ def find_k_clusters(ks, tf, X):
     plt.close('all')
     return ks[np.argmin(recon_errors)]
 
-def heat_map(k, X):
-    nmf = NMF(n_components=k, init='random', random_state=4)
-    dists = nmf.fit_transform(X)
-    sns.heatmap(dists[:50,:])
-    plt.show()
-
 
 if __name__ == '__main__':
     plt.close('all')
-    ks = range(10,31)
+    ks = [10,15,20,25,30]
     k = find_k_clusters(ks, tf, X)
-    # heat_map(18, X)
