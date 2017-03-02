@@ -1,17 +1,8 @@
-# Track prevelance of negative topics overtime
-
-# Negative topics model 1 = (refugees: 8), (refugees: 10),
-# (expensive, cup: 12), (refugees: 15)
-
-# Negative topics model 2 = (refugees: 8), (refugees: 17),
-# (expensive, cup: 12)
-
-# Negative topics model 3 = (refugees: 5), (refugees: 6),
-# (expensive: 13)
 from __future__ import division
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pickle
 from decompose import print_top_words
@@ -31,21 +22,21 @@ model = pickle.load(open('../models/sbux_nmf.pkl', 'rb'))
 n_features = 1000
 ngrams = [1,3]
 max_df = .5
-min_df = .01
-n_topics = 18
+min_df = .015
+n_topics = 20
 n_top_words = 10
 
 
-#
+
 # # Chipotle
 # cmg = data[data['tweets'].str.contains('chipotle')]
 # # load model
 # model = pickle.load(open('../models/cmg_nmf.pkl', 'rb'))
 # n_features = 1000
-# ngrams = [1,2]
+# ngrams = [1,3]
 # max_df = .5
-# min_df = .005
-# n_topics = 17
+# min_df = .015
+# n_topics = 20
 # n_top_words = 10
 
 
@@ -73,7 +64,7 @@ sbux['topic'] = np.argmax(model.transform(vecs), axis=1)
 # stock = pd.read_csv('../sbux_stock.csv')
 # price_delta = stock['Price Change'].tolist()[::-1]
 
-def plot_topic_trend(df,topic_index, topic_name, vlines=[], stock=[], event=None):
+def plot_topic_trend(df,topic_index, topic_name, vday=None, stock=[], refugee=None):
     topic_share = []
     days = []
     dates = np.unique(df['date'])
@@ -83,14 +74,15 @@ def plot_topic_trend(df,topic_index, topic_name, vlines=[], stock=[], event=None
         topic_tweets = df_date[df_date['topic'].isin(topic_index)]
         topic_share.append(len(topic_tweets)/len(df_date))
         days.append(i+1)
-    plt.plot(days, topic_share, lw=2, label="Prevelance of Topic")
+    plt.plot(days, topic_share, lw=2, label="Prevelance of Topic", color='navy')
     if len(stock) > 0:
         plt.plot(days, stock, color='teal', label="Stock Price Change", lw=2)
     plt.xticks(days, dts, rotation='vertical')
-    if len(vlines) > 0:
-        [plt.axvline(x, color='grey', label='Weekend day') for x in vlines]
-    if event:
-        plt.axvline(event[0], color='navy', lw=2, label=event[1], alpha=.5)
+    plt.ylim((0,.35))
+    if vday:
+        plt.axvline(vday[0], color='red', lw=2, label=vday[1], alpha=.5)
+    if refugee:
+        plt.axvline(refugee[0], color='green', lw=2, label=refugee[1], alpha=.5)
     handles, labels = plt.gca().get_legend_handles_labels()
     by_label = OrderedDict(zip(labels, handles))
     plt.legend(by_label.values(), by_label.keys())
@@ -119,43 +111,50 @@ weekends = [10,11,17,18]
 def get_labeled_topics(model, tfidf, company):
     from load_and_process import load_xls
     df1 = load_xls('../../tweets/csv/test1.xls', slang=False, lemma=True, pos=False)
-    df1 = df1[df1['tweets'].str.contains(company)]
     df2 = load_xls('../../tweets/csv/test2.xls', slang=False, lemma=True, pos=False)
-    df2 = df2[df2['tweets'].str.contains(company)]
+    df = pd.concat([df1, df2])
+    df = df[df['tweets'].str.contains(company)]
     # df = pd.concat([df1, df2])
-    X1 = tfidf.transform(df1['tweets'])
-    X2 = tfidf.transform(df2['tweets'])
-    topics = np.argmax(model.transform(X1), axis=1).tolist(), np.argmax(model.transform(X2), axis=1).tolist()
-    df1['topics'] = topics[0]
-    df2['topics'] = topics[1]
-    df1['labels'] = df1['labels'] - 2
-    df2['labels'] = df2['labels'] - 2
-    return df1, df2
+    X = tfidf.transform(df['tweets'])
+    topics = np.argmax(model.transform(X), axis=1).tolist()
+    df['topics'] = topics
+    df['labels'] = df['labels'] - 2
+    return df
 
-def topic_distributions(df1, df2, company, topic_index):
-    topic_df1 = df1[df1['topics'].isin(topic_index)]
-    topic_df2 = df2[df2['topics'].isin(topic_index)]
-    topic1 = topic_df1.groupby('labels')['tweets'].agg(['count'])
-    topic2 = topic_df2.groupby('labels')['tweets'].agg(['count'])
-    topic1['pct_of_tweets'] = topic1['count'] / len(topic_df1)
-    topic2['pct_of_tweets'] = topic2['count'] / len(topic_df2)
-    print topic1, topic2
-    fig, (ax1, ax2) = plt.subplots(ncols=2, sharey=True)
-    seaborn.barplot(df1['lab'], df1['pct_of_tweets'])
-    seaborn.barplot(df2['lab'], df2['pct_of_tweets'])
+def topic_distributions(df, company, topic_index):
+    topic_df = df[df['topics'].isin(topic_index)]
+    topic = topic_df.groupby('labels')['tweets'].agg(['count'])
+    topic['pct_of_tweets'] = topic['count'] / len(topic_df)
+    print topic
+    # plt.bar(topic.index, topic['pct_of_tweets'], align='center')
+    colors = ['pale red', 'greyish', 'windows blue']
+    current_palette_3 = sns.xkcd_palette(colors)
+    sns.set_palette(current_palette_3)
+    sns.set_style('darkgrid')
+    sns.barplot(topic.index, topic['pct_of_tweets'])
+    plt.xticks([0,1,2], ['Negative', 'Neutral', 'Positive'])
+    plt.ylabel('Percent of Tweets in Topic')
+    plt.xlabel('Brand Sentiment')
+    plt.ylim((0.0,1.0))
+    plt.title('{}_topic_{}_sentiment'.format(company, topic_index[0]))
+    plt.savefig('../plots/nmf_{}{}_sentiment'.format(company, topic_index[0]))
     plt.show()
+
 
 if __name__ == '__main__':
     plt.close('all')
-    # plt.style.use('ggplot')
-    topic = 'Chipotle Guacamole'
-    topic_idx = [12, 14]
+    plt.style.use('ggplot')
+    co_string = 'starbucks'
     co = sbux
-    event1 = [2, 'Refugee Hiring Announcement']
-    event2 = [13, "Valentine's Day"]
-    # plot_topic_trend(co, topic_idx, topic, vlines=weekends)
-    # plt.close('all')
-    # create_cloud(co, topic_idx, ['chipotle'], topic)
-
-    df1, df2 = get_labeled_topics(model, tfidf, 'starbucks')
-    topic_distributions(df1, df2, 'starbucks', topic_idx)
+    for x in range(20):
+        plt.close('all')
+        topic_idx = [x]
+        topic = 'nmf_Starbucks{}'.format(topic_idx[0])
+        event1 = [2, 'Refugee Hiring Announcement']
+        event2 = [12, "Valentine's Day"]
+        plot_topic_trend(co, topic_idx, topic, vday=event2, refugee=event1)
+        plt.close('all')
+        create_cloud(co, topic_idx, [co_string], topic)
+        plt.close('all')
+        sent_df = get_labeled_topics(model, tfidf, co_string)
+        topic_distributions(sent_df, co_string, topic_idx)

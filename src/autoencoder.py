@@ -12,68 +12,74 @@ from gensim.models import Word2Vec
 
 
 def embed_tweets(f, company, train=True):
+    # This function creates word embeddings for each tweets.  It returns the
+    # embdding model as well as the embedded tweets.  It also returns a
+    # dataframe with the raw tweet and date for each tweet that has embeddings.
     df = pd.read_csv(f)
     tweets = [x.split(' ') for x in df['tweets'].tolist()]
+    dates = df['date'].tolist()
     if train:
-        model = Word2Vec(tweets, size=50, min_count=20, workers=3)
+        model = Word2Vec(tweets, size=100, min_count=20, workers=3)
     else:
         model = pickle.load(open('../models/embed_model.pkl', 'rb'))
-    print model.most_similar(positive=['cheeseburger', 'chipotle'], negative=['mcdonalds'], topn=5)
     tweets = [tweet for tweet in tweets if company in tweet]
     embedded_tweets = []
     master_tweets = []
-    for tweet in tweets:
+    master_dates = []
+    for i, tweet in enumerate(tweets):
         try:
-            matrix = np.zeros((30, 50))
+            matrix = np.zeros((30, 100))
             for i, word in enumerate(tweet):
                 try:
                     matrix[i,:] = model[word]
                 except:
-                    matrix[i,:] = np.zeros((50))
+                    matrix[i,:] = np.zeros((100))
             # print matrix
-            embedded_tweets.append(np.reshape(matrix,1500))
+            embedded_tweets.append(np.reshape(matrix,3000))
             master_tweets.append(' '.join(tweet))
+            master_dates.append(dates[i])
         except:
             pass
-    return model, embedded_tweets, master_tweets
+    # New dataframe must be created to be properly indexed with embeddings
+    # matrix
+    df = pd.DataFrame({'tweets':master_tweets, 'date':master_dates})
+    return model, embedded_tweets, df
 
 def autoencoder(x):
     x_train = np.array(x[5000:])
     x_test = np.array(x[:5000])
-    # this is the size of our encoded representations
-    encoding_dims = [64, 32]  # 32 floats -> compression of factor 109, assuming the input is 3500 floats
-    # this is our input placeholder
-    input_tweet = Input(shape=(1500,))
-    # "encoded" is the encoded representation of the input
-    encoded = Dense(64, activation='relu')(input_tweet)
-    encoded = Dense(32, activation='relu')(encoded)
-    # "decoded" is the lossy reconstruction of the input
-    decoded = Dense(64, activation='relu')(encoded)
-    decoded = Dense(1500, activation='sigmoid')(decoded)
-    # this model maps an input to its reconstruction
+    # input shape
+    input_tweet = Input(shape=(3000,))
+    # 32 floats -> compression of factor 60, assuming the input is 3000 floats
+    encoded = Dense(50, activation='relu')(input_tweet)
+    encoded = Dense(25, activation='relu')(encoded)
+    # reconstruct the input
+    decoded = Dense(50, activation='relu')(encoded)
+    decoded = Dense(3000, activation='sigmoid')(decoded)
+    # model input to its reconstruction
     autoencoder = Model(input=input_tweet, output=decoded)
-    # this model maps an input to its encoded representation
+    # model input to its encoded representation
     encoder = Model(input=input_tweet, output=encoded)
-    # create a placeholder for an encoded (32-dimensional) input
-    encoded_input = Input(shape=(64,))
-    # retrieve the last layer of the autoencoder model
+    # final layer encoder input shape
+    encoded_input = Input(shape=(50,))
+    # setup decoder model
     decoder_layer = autoencoder.layers[-1]
     # create the decoder model
     decoder = Model(input=encoded_input, output=decoder_layer(encoded_input))
-    autoencoder.compile(optimizer='adadelta', loss='mean_squared_error')
+    autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
     autoencoder.fit(x_train, x_train,
-                nb_epoch=30,
+                nb_epoch=10,
                 batch_size=100,
                 shuffle=True,
                 validation_data=(x_test, x_test))
     encoded_tweets = encoder.predict(np.array(x))
-    # decoded_tweets = decoder.predict(encoded_tweets)
     return encoded_tweets
 
 
 if __name__ == '__main__':
-    embed_model, embeddings, tweets = embed_tweets('../../tweets/csv/clean_master.csv', 'starbucks', train=False)
+    embed_model, embeddings, df = embed_tweets('../../tweets/csv/clean_master.csv', 'starbucks', train=False)
     encoded = autoencoder(embeddings)
     pickle.dump(embed_model, open('embed_model.pkl', 'wb'))
     pickle.dump(encoded, open('encoded_tweets.pkl', 'wb'))
-    pickle.dump(tweets, open('tweets_ae.pkl', 'wb'))
+    pickle.dump(df, open('tweets_ae.pkl', 'wb'))
+    print embed_model.most_similar(positive=['cheeseburger', 'chipotle'], negative=['mcdonalds'], topn=5)

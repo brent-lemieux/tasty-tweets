@@ -15,12 +15,12 @@ test = load_xls('../../tweets/csv/test1.xls', slang=True, lemma=True)
 
 
 # segment data by company
-# Starbucks
-sbux_train = train[train['tweets'].str.contains('starbucks')]
-sbux_test = test[test['tweets'].str.contains('starbucks')]
-# # Chipotle
-# cmg_train = train[train['tweets'].str.contains('chipotle')]
-# cmg_test = test[test['tweets'].str.contains('chipotle')]
+# # Starbucks
+# sbux_train = train[train['tweets'].str.contains('starbucks')]
+# sbux_test = test[test['tweets'].str.contains('starbucks')]
+# Chipotle
+cmg_train = train[train['tweets'].str.contains('chipotle')]
+cmg_test = test[test['tweets'].str.contains('chipotle')]
 # # McDonalds
 # mcd_train = train[train['tweets'].str.contains('mcdonalds')]
 # mcd_test = test[test['tweets'].str.contains('mcdonalds')]
@@ -28,8 +28,8 @@ sbux_test = test[test['tweets'].str.contains('starbucks')]
 n_features = 1000
 ngrams = [1,3]
 max_df = .5
-min_df = .01
-n_topics = 18
+min_df = .015
+n_topics = 20
 n_top_words = 10
 
 
@@ -94,9 +94,9 @@ def drill_topics(df, train_preds, mod1, labeled_df):
 
 if __name__ == '__main__':
     # UPDATE COMPANY HERE
-    train =  sbux_train['tweets'].values.reshape(sbux_train.values.shape[0],)
+    train =  cmg_train['tweets'].values.reshape(cmg_train.values.shape[0],)
     # UPDATE COMPANY HERE
-    test = sbux_test['tweets'].values.reshape(sbux_test.values.shape[0],)
+    test = cmg_test['tweets'].values.reshape(cmg_test.values.shape[0],)
     train, test, feature_names, tf = tfidf(train, test)
     nmf = NMF(n_components=n_topics, init='random')
     ###############################################
@@ -104,9 +104,9 @@ if __name__ == '__main__':
     mod_name = 'nmf'
     ###############################################
     train_preds, test_preds, model = decompose(model, train, test, tf)
-    pickle.dump(model, open('../models/sbux_nmf.pkl', 'wb'))
+    pickle.dump(model, open('../models/cmg_nmf.pkl', 'wb'))
     # UPDATE COMPANY HERE
-    summary, topics_df = topic_summaries(sbux_test, test_preds, mod_name=mod_name)
+    summary, topics_df = topic_summaries(cmg_test, test_preds, mod_name=mod_name)
     # UPDATE COMPANY HERE
-    topics_model = sbux_train
+    topics_model = cmg_train
     drilled = drill_topics(topics_model, train_preds, model, topics_df)

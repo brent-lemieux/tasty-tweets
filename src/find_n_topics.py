@@ -21,7 +21,7 @@ df = data[data['tweets'].str.contains(company)]
 n_features = 1000
 ngrams = [1,3]
 max_df = .5
-min_df = .01
+min_df = .03
 n_top_words = 10
 
 

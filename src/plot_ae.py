@@ -22,11 +22,16 @@ def find_k(encoded_tweets, k_cluster_range):
     plt.show()
     return zip(k_cluster_range, scores)
 
+
 def kmeans(encoded_tweets, k, company):
     km = KMeans(n_clusters=k).fit(encoded_tweets)
     labels = km.labels_
-    tweets = pickle.load(open('tweets_ae.pkl', 'rb'))
-    df = pd.DataFrame({'tweets':tweets, 'topic':labels})
+    tweetdf = pickle.load(open('tweets_ae.pkl', 'rb'))
+    tweets = tweetdf['tweets'].tolist()
+    dates = tweetdf['date'].tolist()
+    df = pd.DataFrame({'tweets':tweets,
+                        'date':dates,
+                        'topic':labels})
     return df
 
 if __name__ == '__main__':
@@ -35,7 +40,7 @@ if __name__ == '__main__':
     vecs = pickle.load(open('encoded_tweets.pkl', 'rb'))
     # ks = range(2,21)
     # scores = find_k(vecs, ks)
-    tweets = kmeans(vecs, 12, 'starbucks')
+    tweets = kmeans(vecs, 20, 'starbucks')
     stop = STOPWORDS.add('starbucks')
     for x in np.unique(tweets['topic']):
         by_topic = tweets[tweets['topic']==x]['tweets'].tolist()

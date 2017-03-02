@@ -63,37 +63,45 @@ n_top_words = 10
 
 #### Topics
 
-0 - Starbucks hiring ads
+0 - ? - news, ads
 
-1 - ?
+1 - gift card
 
-2 - Starbucks Valentine
+2 - Valentine?
 
-3, 15 - Need, want Starbucks
+3 - ?
 
-4 - Starbucks gift card
+4 - ?
 
-5 - Starbucks CEO, Justin Bieber
+5 - ?
 
-6 - Drink starbucks
+6 - ?
 
-7 - Free Starbucks
+7 - ?
 
-8 - CEO
+8 - ?
 
-9 - Business news starbucks
+9 - ?
 
-10 - Starbucks app
+10 - job ads
 
-11 - Starbucks is expensive
+11 - ?
 
-12, 14 - Refugee hiring boycott
+12 - ?
 
-13 - Like Starbucks
+13 - ?
 
-16 - Bring Starbucks
+14 - ?
 
-17 - Starbucks line
+15 - ?
+
+16 - boycott
+
+17 - ?
+
+18 - ?
+
+19 - ?
 
 
 
