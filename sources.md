@@ -1,15 +1,16 @@
 ## Sources
+Data Source - Twitter API
 
 Deep Learning - Ian Goodfellow and Yoshua Bengio and Aaron Courville - http://www.deeplearningbook.org/
 
-Analytics Vidhya - https://discuss.analyticsvidhya.com/t/how-can-i-create-word-cloud-in-python/969/2
+WordCloud Tutorial - Analytics Vidhya - https://discuss.analyticsvidhya.com/t/how-can-i-create-word-cloud-in-python/969/2
 
-Scikit Learn Documentation
+Scikit Learn Documentation - http://scikit-learn.org/stable/
 
-Emoji mapper
+Emoji mapper - https://github.com/iamcal/emoji-data/blob/master/README.md
 
-Keras Autoencoders
+Keras Autoencoders - https://blog.keras.io/building-autoencoders-in-keras.html
 
-Spacy lemmatization
+Spacy lemmatization - https://spacy.io/docs/usage/tutorials
 
-Gensim embeddings 
+Gensim embeddings - https://radimrehurek.com/gensim/models/word2vec.html

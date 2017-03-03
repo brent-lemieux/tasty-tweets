@@ -22,64 +22,64 @@ def embed_tweets(f, company, train=True):
         model = Word2Vec(tweets, size=100, min_count=20, workers=3)
     else:
         model = pickle.load(open('../models/embed_model.pkl', 'rb'))
-    tweets = [tweet for tweet in tweets if company in tweet]
+    tweets_dt = [(tweet, date) for tweet, date in zip(tweets, dates) if company in tweet]
     embedded_tweets = []
     master_tweets = []
     master_dates = []
-    for i, tweet in enumerate(tweets):
+    for tweet, date in tweets_dt:
         try:
             matrix = np.zeros((30, 100))
-            for i, word in enumerate(tweet):
+            for idx, word in enumerate(tweet):
                 try:
-                    matrix[i,:] = model[word]
+                    matrix[idx,:] = model[word]
                 except:
-                    matrix[i,:] = np.zeros((100))
-            # print matrix
+                    matrix[idx,:] = np.zeros((100))
             embedded_tweets.append(np.reshape(matrix,3000))
+            # print np.max(np.reshape(matrix,3000))
             master_tweets.append(' '.join(tweet))
-            master_dates.append(dates[i])
+            master_dates.append(date)
         except:
             pass
-    # New dataframe must be created to be properly indexed with embeddings
-    # matrix
-    df = pd.DataFrame({'tweets':master_tweets, 'date':master_dates})
-    return model, embedded_tweets, df
+    print master_dates[-1]
+    return model, embedded_tweets, master_tweets, master_dates
 
 def autoencoder(x):
     x_train = np.array(x[5000:])
     x_test = np.array(x[:5000])
     # input shape
     input_tweet = Input(shape=(3000,))
-    # 32 floats -> compression of factor 60, assuming the input is 3000 floats
-    encoded = Dense(50, activation='relu')(input_tweet)
-    encoded = Dense(25, activation='relu')(encoded)
+    # 30 floats -> compression of factor 60, assuming the input is 3000 floats
+    encoded = Dense(32, activation='relu')(input_tweet)
+    # encoded = Dense(25, activation='relu')(encoded)
     # reconstruct the input
-    decoded = Dense(50, activation='relu')(encoded)
-    decoded = Dense(3000, activation='sigmoid')(decoded)
+    # decoded = Dense(100, activation='relu')(encoded)
+    decoded = Dense(3000, activation='sigmoid')(encoded)
     # model input to its reconstruction
     autoencoder = Model(input=input_tweet, output=decoded)
     # model input to its encoded representation
     encoder = Model(input=input_tweet, output=encoded)
     # final layer encoder input shape
-    encoded_input = Input(shape=(50,))
+    encoded_input = Input(shape=(32,))
     # setup decoder model
     decoder_layer = autoencoder.layers[-1]
     # create the decoder model
     decoder = Model(input=encoded_input, output=decoder_layer(encoded_input))
     autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
     autoencoder.fit(x_train, x_train,
-                nb_epoch=10,
+                nb_epoch=3,
                 batch_size=100,
                 shuffle=True,
                 validation_data=(x_test, x_test))
     encoded_tweets = encoder.predict(np.array(x))
-    return encoded_tweets
+    return encoded_tweets, encoder
 
 
 if __name__ == '__main__':
-    embed_model, embeddings, df = embed_tweets('../../tweets/csv/clean_master.csv', 'starbucks', train=False)
-    encoded = autoencoder(embeddings)
-    pickle.dump(embed_model, open('embed_model.pkl', 'wb'))
+    embed_model, embeddings, tweets, dates = embed_tweets('../../tweets/csv/clean_master.csv', 'starbucks', train=True)
+    pickle.dump(embed_model, open('../models/embed_model.pkl', 'wb'))
+    pickle.dump(tweets, open('tweets_ae.pkl', 'wb'))
+    pickle.dump(dates, open('dates_ae.pkl', 'wb'))
+    encoded, encoder = autoencoder(embeddings)
     pickle.dump(encoded, open('encoded_tweets.pkl', 'wb'))
-    pickle.dump(df, open('tweets_ae.pkl', 'wb'))
-    print embed_model.most_similar(positive=['cheeseburger', 'chipotle'], negative=['mcdonalds'], topn=5)
+    pickle.dump(encoder, open('../models/encoder.pkl', 'wb'))
+    print embed_model.most_similar(positive=['shake', 'starbucks'], negative=['mcdonalds'], topn=5)

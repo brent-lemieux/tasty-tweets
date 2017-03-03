@@ -27,7 +27,7 @@ n_topics = 20
 n_top_words = 10
 
 
-
+#
 # # Chipotle
 # cmg = data[data['tweets'].str.contains('chipotle')]
 # # load model
@@ -78,7 +78,7 @@ def plot_topic_trend(df,topic_index, topic_name, vday=None, stock=[], refugee=No
     if len(stock) > 0:
         plt.plot(days, stock, color='teal', label="Stock Price Change", lw=2)
     plt.xticks(days, dts, rotation='vertical')
-    plt.ylim((0,.35))
+    plt.ylim((0,.45))
     if vday:
         plt.axvline(vday[0], color='red', lw=2, label=vday[1], alpha=.5)
     if refugee:
@@ -90,8 +90,9 @@ def plot_topic_trend(df,topic_index, topic_name, vday=None, stock=[], refugee=No
     plt.title('{} Topic Overtime'.format(topic_name))
     plt.ylabel('Percentage of tweets about topic')
     plt.xlabel('Day')
-    plt.savefig('../plots/{}_topic_ts.png'.format(topic_name.replace(' ','_')))
-    plt.show()
+    plt.savefig('../exploratory_plots/{}_topic_ts.png'.format(topic_name.replace(' ','_')))
+    plt.close('all')
+
 
 
 def create_cloud(df, topic_index, extra_stop, topic_name):
@@ -103,15 +104,15 @@ def create_cloud(df, topic_index, extra_stop, topic_name):
      height=600).generate(tweets)
     plt.imshow(wordcloud)
     plt.axis('off')
-    plt.savefig('../plots/{}_cloud.png'.format(topic_name.replace(' ','_')))
-    plt.show()
+    plt.savefig('../exploratory_plots/{}_cloud.png'.format(topic_name.replace(' ','_')))
+    plt.close('all')
 
-weekends = [10,11,17,18]
+
 
 def get_labeled_topics(model, tfidf, company):
     from load_and_process import load_xls
-    df1 = load_xls('../../tweets/csv/test1.xls', slang=False, lemma=True, pos=False)
-    df2 = load_xls('../../tweets/csv/test2.xls', slang=False, lemma=True, pos=False)
+    df1 = load_xls('../../tweets/csv/test1.xls', slang=True, lemma=True, pos=False)
+    df2 = load_xls('../../tweets/csv/test2.xls', slang=True, lemma=True, pos=False)
     df = pd.concat([df1, df2])
     df = df[df['tweets'].str.contains(company)]
     # df = pd.concat([df1, df2])
@@ -121,7 +122,7 @@ def get_labeled_topics(model, tfidf, company):
     df['labels'] = df['labels'] - 2
     return df
 
-def topic_distributions(df, company, topic_index):
+def topic_distributions(df, topic, topic_index):
     topic_df = df[df['topics'].isin(topic_index)]
     topic = topic_df.groupby('labels')['tweets'].agg(['count'])
     topic['pct_of_tweets'] = topic['count'] / len(topic_df)
@@ -136,9 +137,9 @@ def topic_distributions(df, company, topic_index):
     plt.ylabel('Percent of Tweets in Topic')
     plt.xlabel('Brand Sentiment')
     plt.ylim((0.0,1.0))
-    plt.title('{}_topic_{}_sentiment'.format(company, topic_index[0]))
-    plt.savefig('../plots/nmf_{}{}_sentiment'.format(company, topic_index[0]))
-    plt.show()
+    plt.title('{}_topic_{}_sentiment'.format(topic, topic_index[0]))
+    plt.savefig('../exploratory_plots/nmf_{}_sentiment.png'.format(topic))
+    plt.close('all')
 
 
 if __name__ == '__main__':
@@ -146,6 +147,10 @@ if __name__ == '__main__':
     plt.style.use('ggplot')
     co_string = 'starbucks'
     co = sbux
+    # by_topic = co.groupby('topic')['tweets'].agg('count')
+    # sns.barplot(by_topic.index, by_topic['count'])
+    # plt.title('Number of Tweets in each Topic')
+    # plt.savefig('starbucks_topics.png')
     for x in range(20):
         plt.close('all')
         topic_idx = [x]
@@ -157,4 +162,4 @@ if __name__ == '__main__':
         create_cloud(co, topic_idx, [co_string], topic)
         plt.close('all')
         sent_df = get_labeled_topics(model, tfidf, co_string)
-        topic_distributions(sent_df, co_string, topic_idx)
+        topic_distributions(sent_df, topic, topic_idx)
