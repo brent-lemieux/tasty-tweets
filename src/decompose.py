@@ -15,12 +15,14 @@ test = load_xls('../../tweets/csv/test1.xls', slang=True, lemma=True)
 
 
 # segment data by company
-# # Starbucks
-# sbux_train = train[train['tweets'].str.contains('starbucks')]
-# sbux_test = test[test['tweets'].str.contains('starbucks')]
-# Chipotle
-cmg_train = train[train['tweets'].str.contains('chipotle')]
-cmg_test = test[test['tweets'].str.contains('chipotle')]
+# Starbucks
+sbux_train = train[train['tweets'].str.contains('starbucks')]
+sbux_test = test[test['tweets'].str.contains('starbucks')]
+
+# # Chipotle
+# cmg_train = train[train['tweets'].str.contains('chipotle')]
+# cmg_test = test[test['tweets'].str.contains('chipotle')]
+
 # # McDonalds
 # mcd_train = train[train['tweets'].str.contains('mcdonalds')]
 # mcd_test = test[test['tweets'].str.contains('mcdonalds')]
@@ -51,7 +53,7 @@ def tfidf(train, test):
 
 def decompose(model, train, test, tf):
     feature_names = tf.get_feature_names()
-    model.fit(train)
+    # model.fit(train)
     print_top_words(model, feature_names, n_top_words)
     train_dist_preds = model.transform(train)
     train_preds = np.argmax(train_dist_preds, axis=1)
@@ -62,7 +64,7 @@ def decompose(model, train, test, tf):
 
 def topic_summaries(df, test_preds, mod_name):
     df['topic'] = test_preds.tolist()
-    file_dir = '../../tweets/topic_dfs/{}_topic_preds.csv'.format(mod_name)
+    file_dir = '../../tweets/topic_dfs/{}_sbux_topic_preds.csv'.format(mod_name)
     df.to_csv(file_dir)
     topic_df = pd.read_csv(file_dir)
     summary = topic_df.groupby('topic')['labels'].agg(['mean', 'std','count'])
@@ -94,19 +96,20 @@ def drill_topics(df, train_preds, mod1, labeled_df):
 
 if __name__ == '__main__':
     # UPDATE COMPANY HERE
-    train =  cmg_train['tweets'].values.reshape(cmg_train.values.shape[0],)
+    train =  sbux_train['tweets'].values.reshape(sbux_train.values.shape[0],)
     # UPDATE COMPANY HERE
-    test = cmg_test['tweets'].values.reshape(cmg_test.values.shape[0],)
+    test = sbux_test['tweets'].values.reshape(sbux_test.values.shape[0],)
     train, test, feature_names, tf = tfidf(train, test)
     nmf = NMF(n_components=n_topics, init='random')
     ###############################################
-    model = nmf # Set model here
+    # model = nmf # Set model here
+    model = pickle.load(open('../models/sbux_nmf.pkl', 'rb'))
     mod_name = 'nmf'
     ###############################################
     train_preds, test_preds, model = decompose(model, train, test, tf)
-    pickle.dump(model, open('../models/cmg_nmf.pkl', 'wb'))
+    # pickle.dump(model, open('../models/mcd_nmf.pkl', 'wb'))
     # UPDATE COMPANY HERE
-    summary, topics_df = topic_summaries(cmg_test, test_preds, mod_name=mod_name)
+    summary, topics_df = topic_summaries(sbux_test, test_preds, mod_name=mod_name)
     # UPDATE COMPANY HERE
-    topics_model = cmg_train
+    topics_model = sbux_train
     drilled = drill_topics(topics_model, train_preds, model, topics_df)
