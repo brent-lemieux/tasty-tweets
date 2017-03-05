@@ -80,7 +80,7 @@ def plot_topic_trend(df, topic_index, topic_name, vday=None, stock=[], refugee=N
     df1 = pd.DataFrame({'Date':dates, 'Data':topic_share})
     df1['Description'] = 'Topic Prevalance'
     df = pd.concat([df1, stock])
-    df.to_csv('../final_plots/sb{}.csv'.format(topic_index[0]))
+    df.to_csv('../plot_data/sb{}.csv'.format(topic_index[0]))
 
 
 def create_cloud(df, company, k, topic_index):
