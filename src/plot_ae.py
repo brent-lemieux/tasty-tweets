@@ -3,11 +3,13 @@ from __future__ import division
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 import seaborn as sns
 import pickle
 
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
+from sklearn.decomposition import PCA
 
 from wordcloud import WordCloud, STOPWORDS
 from collections import OrderedDict
@@ -28,15 +30,22 @@ def find_k(encoded_tweets, k_cluster_range):
 def kmeans(encoded_tweets, k, company):
     encoded_tweets = np.array(encoded_tweets)
     print encoded_tweets.shape
-    km = KMeans(n_clusters=15).fit(encoded_tweets)
+    km = KMeans(n_clusters=k).fit(encoded_tweets)
     labels = km.labels_
     print np.unique(labels)
-    tweets = pickle.load(open('tweets_ae.pkl', 'rb'))
-    dates = pickle.load(open('dates_ae.pkl', 'rb'))
+    tweets = pickle.load(open('cmg_tweets_ae.pkl', 'rb'))
+    dates = pickle.load(open('cmg_dates_ae.pkl', 'rb'))
     df = pd.DataFrame({'tweets':tweets,
                         'date':dates,
                         'topic':labels})
-    return df
+    return df, km
+
+
+# # Get stock data
+stock_file = '../stock_data/cmg_stock.csv'
+stock_price = pd.read_csv(stock_file)
+stock_price['Description'] = 'Stock Price Change'
+# price_delta = stock['Stock Price Change'].tolist()[::-1]
 
 
 def plot_topic_trend(df, topic_index, topic_name, vday=None, stock=[], refugee=None):
@@ -49,11 +58,11 @@ def plot_topic_trend(df, topic_index, topic_name, vday=None, stock=[], refugee=N
         topic_tweets = df_date[df_date['topic'].isin(topic_index)]
         topic_share.append(len(topic_tweets)/len(df_date))
         days.append(i+1)
-    plt.plot(days, topic_share, lw=2, label="Prevelance of Topic", color='navy')
-    if len(stock) > 0:
-        plt.plot(days, stock, color='teal', label="Stock Price Change", lw=2)
+    plt.plot(days, topic_share, lw=2, label="Prevalance of Topic", color='navy')
+    # if len(stock) > 0:
+    #     plt.plot(days, stock, color='teal', label="Stock Price Change", lw=2)
     plt.xticks(days, dts, rotation='vertical')
-    plt.ylim((0,.35))
+    plt.ylim((-.05,.35))
     if vday:
         plt.axvline(vday[0], color='red', lw=2, label=vday[1], alpha=.5)
     if refugee:
@@ -67,6 +76,12 @@ def plot_topic_trend(df, topic_index, topic_name, vday=None, stock=[], refugee=N
     plt.xlabel('Day')
     plt.savefig('../exploratory_plots/{}_topic_ts.png'.format(topic_name.replace(' ','_')))
     plt.show()
+    # Uncomment below to create csv for d3 plot
+    df1 = pd.DataFrame({'Date':dates, 'Data':topic_share})
+    df1['Description'] = 'Topic Prevalance'
+    df = pd.concat([df1, stock])
+    df.to_csv('../final_plots/cmg{}.csv'.format(topic_index[0]))
+
 
 def create_cloud(df, company, k, topic_index):
     tweets = df
@@ -80,35 +95,23 @@ def create_cloud(df, company, k, topic_index):
     plt.savefig('../exploratory_plots/ae_{}{}_cloud.png'.format(company, topic_index))
 
 
-def get_labeled_topics(encoder, embedder, company, k_topics):
+def get_labeled_topics(encoder, km, company):
+    # create a DataFrame with topics and sentiment labels by applying model
+    # to labeled subset
     from load_and_process import load_xls
     df1 = load_xls('../../tweets/csv/test1.xls', slang=True, lemma=True, pos=False)
     df2 = load_xls('../../tweets/csv/test2.xls', slang=True, lemma=True, pos=False)
     df = pd.concat([df1, df2])
     df = df[df['tweets'].str.contains(company)]
-    tweets = [x.split(' ') for x in df['tweets'].tolist()]
-    embedded_tweets = []
-    master_tweets = []
-    master_labels = []
-    for i, tweet in enumerate(tweets):
-        try:
-            matrix = np.zeros((30, 100))
-            for idx, word in enumerate(tweet):
-                try:
-                    matrix[idx,:] = embedder[word]
-                except:
-                    matrix[idx,:] = np.zeros((100))
-            embedded_tweets.append(np.reshape(matrix,3000))
-            master_tweets.append(' '.join(tweet))
-            master_labels.append(df['labels'].tolist()[i])
-        except:
-            pass
-    encoded = encoder.predict(np.array(embedded_tweets))
-    km = KMeans(k_topics).fit(encoded)
-    topics = km.labels_
-    df = pd.DataFrame({'tweets':master_tweets, 'labels':master_labels, 'topics':topics})
+    # df = pd.concat([df1, df2])
+    tfidf = pickle.load(open('tfidf_ae.pkl', 'rb'))
+    print tfidf
+    X = tfidf.transform(df['tweets'].values).todense()
+    topics = km.predict(encoder.predict(X))
+    df['topics'] = topics
     df['labels'] = df['labels'] - 2
     return df
+
 
 def topic_distributions(df, topic_name, topic_index):
     topic_df = df[df['topics'].isin(topic_index)]
@@ -124,30 +127,52 @@ def topic_distributions(df, topic_name, topic_index):
     plt.xlabel('Brand Sentiment')
     plt.ylim((0.0,1.0))
     plt.title('{}_sentiment'.format(topic_name))
-    plt.savefig('../exploratory_plots/ae_{}_sentiment.png'.format(topic_name))
+    plt.savefig('../exploratory_plots/{}_sentiment.png'.format(topic_name))
+    plt.show()
+    return topic_df, topic
+
+
+def pca(vecs, labels):
+    pcs = PCA(n_components=2).fit_transform(vecs)
+    df = pd.DataFrame({'x':list(pcs[:,0].flatten()), 'y':list(pcs[:,1].flatten()), 'topics':labels})
+    df = df[df['topics'] < 6]
+    sns.lmplot('x', 'y', data=df, hue='topics', fit_reg=False, size=4, aspect=2)
+    plt.subplots_adjust(top=.8)
+    plt.title('Autoencoder PCA Topic Separation')
+    plt.savefig('../exploratory_plots/pca_ae_plot.png')
     plt.show()
 
 
-def create_plots(vecs, k, company, encoder, embedder):
-    df = kmeans(vecs, k, company)
+def create_plots(vecs, k, company, encoder):
+    df, km = kmeans(vecs, k, company)
+    # labels = km.labels_
+    # pca(vecs, labels)
+    event1 = [2, 'Refugee Hiring Announcement']
+    event2 = [12, "Valentine's Day"]
+    # topic = 'Starbucks Refugee Topic Prevalance'
+    # plot_topic_trend(df, [1], topic, vday=event2, refugee=event1)
+    sent_df = get_labeled_topics(encoder, km, company)
+    dists = []
     for x in range(k):
         plt.close('all')
-        topic = 'ae_Starbucks{}'.format(x)
-        create_cloud(df, company, 15, x)
+        topic = 'ae_Chipotle{}'.format(x)
+        create_cloud(df, company, k, x)
         plt.close('all')
-        plot_topic_trend(df, [x], topic, vday=event2, refugee=event1)
+        plot_topic_trend(df, [x], topic, vday=event2, stock=stock_price)
         plt.close('all')
-        sent_df = get_labeled_topics(encoder, embedder, company, k)
-        topic_distributions(sent_df, topic, [x])
+        try:
+            topic_df, topic_dist = topic_distributions(sent_df, topic, [x])
+            dists.append((topic_df, topic_dist))
+        except:
+            pass
+    return dists
 
 if __name__ == '__main__':
     plt.close('all')
     plt.style.use('ggplot')
-    vecs = pickle.load(open('encoded_tweets.pkl', 'rb'))
-    company = 'starbucks'
-    event1 = [2, 'Refugee Hiring Announcement']
-    event2 = [12, "Valentine's Day"]
+    vecs = pickle.load(open('cmg_encoded_tweets.pkl', 'rb'))
+    company = 'chipotle'
     k = 15
-    encoder = pickle.load(open('../models/encoder.pkl', 'rb'))
-    embedder = pickle.load(open('../models/embed_model.pkl', 'rb'))
-    create_plots(vecs, k, company, encoder, embedder)
+    encoder = pickle.load(open('../models/cmg_encoder.pkl', 'rb'))
+    # embedder = pickle.load(open('../models/embed_model.pkl', 'rb'))
+    dists = create_plots(vecs, k, company, encoder)

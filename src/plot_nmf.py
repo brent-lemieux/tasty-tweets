@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import PCA
 import pickle
 from decompose import print_top_words
 from wordcloud import WordCloud, STOPWORDS
@@ -14,17 +15,17 @@ data = pd.read_csv('/Users/blemieux/projects/tweets/csv/clean_master.csv')
 
 # segment data by company
 
-# # Starbucks
-# sbux = data[data['tweets'].str.contains('starbucks')]
-# # load model
-# model = pickle.load(open('../models/sbux_nmf.pkl', 'rb'))
-# # define TfidfVectorizer parameters
-# n_features = 1000
-# ngrams = [1,3]
-# max_df = .5
-# min_df = .015
-# n_topics = 20
-# n_top_words = 10
+# Starbucks
+sbux = data[data['tweets'].str.contains('starbucks')]
+# load model
+model = pickle.load(open('../models/sbux_nmf.pkl', 'rb'))
+# define TfidfVectorizer parameters
+n_features = 1000
+ngrams = [1,3]
+max_df = .5
+min_df = .015
+n_topics = 20
+n_top_words = 10
 
 
 # # Chipotle
@@ -40,32 +41,32 @@ data = pd.read_csv('/Users/blemieux/projects/tweets/csv/clean_master.csv')
 
 
 
-# # McDonalds
-mcd = data[data['tweets'].str.contains('mcdonalds')]
-# load model
-model = pickle.load(open('../models/mcd_nmf.pkl', 'rb'))
-# define TfidfVectorizer parameters
-n_features = 1000
-ngrams = [1,3]
-max_df = .5
-min_df = .015
-n_topics = 20
-n_top_words = 10
+# # # McDonalds
+# mcd = data[data['tweets'].str.contains('mcdonalds')]
+# # load model
+# model = pickle.load(open('../models/mcd_nmf.pkl', 'rb'))
+# # define TfidfVectorizer parameters
+# n_features = 1000
+# ngrams = [1,3]
+# max_df = .5
+# min_df = .015
+# n_topics = 20
+# n_top_words = 10
 
 
 # vectorize
 tfidf = TfidfVectorizer(max_features=n_features, ngram_range=ngrams, max_df=max_df, min_df=min_df,stop_words='english')
 
-vecs = tfidf.fit_transform(mcd['tweets']).todense()
+vecs = tfidf.fit_transform(sbux['tweets']).todense()
 feature_names = tfidf.get_feature_names()
 
-mcd['topic'] = np.argmax(model.transform(vecs), axis=1)
+sbux['topic'] = np.argmax(model.transform(vecs), axis=1)
 # # Get Starbucks stock data
 # stock = pd.read_csv('../sbux_stock.csv')
 # price_delta = stock['Price Change'].tolist()[::-1]
 
 def plot_topic_trend(df,topic_index, topic_name, vday=None, stock=[], refugee=None):
-    # Plot prevelance for topic_index overtime
+    # Plot prevalance for topic_index overtime
     topic_share = []
     days = []
     dates = np.unique(df['date'])
@@ -75,7 +76,7 @@ def plot_topic_trend(df,topic_index, topic_name, vday=None, stock=[], refugee=No
         topic_tweets = df_date[df_date['topic'].isin(topic_index)]
         topic_share.append(len(topic_tweets)/len(df_date))
         days.append(i+1)
-    plt.plot(days, topic_share, lw=2, label="Prevelance of Topic", color='navy')
+    plt.plot(days, topic_share, lw=2, label="Prevalance of Topic", color='navy')
     if len(stock) > 0:
         plt.plot(days, stock, color='teal', label="Stock Price Change", lw=2)
     plt.xticks(days, dts, rotation='vertical')
@@ -144,15 +145,25 @@ def topic_distributions(df, topic_name, topic_index):
     plt.savefig('../exploratory_plots/{}_sentiment.png'.format(topic_name))
     plt.close('all')
 
+def pca(vecs, labels):
+    pcs = PCA(n_components=2).fit_transform(vecs)
+    df = pd.DataFrame({'x':list(pcs[:,0].flatten()), 'y':list(pcs[:,1].flatten()), 'topics':labels})
+    df = df[df['topics'] < 6]
+    sns.lmplot('x', 'y', data=df, hue='topics', fit_reg=False, size=4, aspect=2)
+    plt.subplots_adjust(top=.8)
+    plt.title('Matrix Factorization PCA Topic Separation')
+    plt.savefig('../exploratory_plots/pca_nmf_plot.png')
+    plt.show()
+
 def create_exploratory_plots(k):
     # create exploratory_plots for each topic in k
     for x in range(k):
         plt.close('all')
         topic_idx = [x]
-        topic_name = 'nmf_McDonalds{}'.format(topic_idx[0])
+        topic_name = 'nmf_Starbucks{}'.format(topic_idx[0])
         event1 = [2, 'Refugee Hiring Announcement']
         event2 = [12, "Valentine's Day"]
-        plot_topic_trend(co, topic_idx, topic_name, vday=event2)
+        plot_topic_trend(co, topic_idx, topic_name, vday=event2, refugee=event1)
         plt.close('all')
         create_cloud(co, topic_idx, [co_string], topic_name)
         plt.close('all')
@@ -163,10 +174,11 @@ def create_exploratory_plots(k):
 if __name__ == '__main__':
     plt.close('all')
     plt.style.use('ggplot')
-    co_string = 'mcdonalds'
-    co = mcd
+    co_string = 'Starbucks'
+    co = sbux
     # by_topic = co.groupby('topic')['tweets'].agg('count')
     # sns.barplot(by_topic.index, by_topic['count'])
     # plt.title('Number of Tweets in each Topic')
     # plt.savefig('starbucks_topics.png')
-    create_exploratory_plots(20)
+    # create_exploratory_plots(20)
+    pca(vecs, co['topic'].tolist())
