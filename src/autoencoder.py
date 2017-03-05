@@ -82,8 +82,8 @@ def autoencoder(x):
     adam = keras.optimizers.Adam(lr=.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
     autoencoder.compile(optimizer=adam, loss='binary_crossentropy')
     autoencoder.fit(x_train, x_train,
-                nb_epoch=100,
-                batch_size=200,
+                nb_epoch=50,
+                batch_size=100,
                 shuffle=True,
                 validation_data=(x_test, x_test))
     encoded_tweets = encoder.predict(np.array(x))
@@ -93,10 +93,10 @@ def autoencoder(x):
 if __name__ == '__main__':
     # embed_model, embeddings, tweets, dates = embed_tweets('../../tweets/csv/clean_master.csv', 'starbucks', train=False)
     # pickle.dump(embed_model, open('../models/embed_model.pkl', 'wb'))
-    tf_vecs, tweets, dates = tfidf('../../tweets/csv/clean_master.csv', 'chipotle')
-    pickle.dump(tweets, open('cmg_tweets_ae.pkl', 'wb'))
-    pickle.dump(dates, open('cmg_dates_ae.pkl', 'wb'))
+    tf_vecs, tweets, dates = tfidf('../../tweets/csv/clean_master.csv', 'starbucks')
+    pickle.dump(tweets, open('sb_tweets_ae.pkl', 'wb'))
+    pickle.dump(dates, open('sb_dates_ae.pkl', 'wb'))
     encoded, encoder = autoencoder(tf_vecs)
-    pickle.dump(encoded, open('cmg_encoded_tweets.pkl', 'wb'))
-    pickle.dump(encoder, open('../models/cmg_encoder.pkl', 'wb'))
+    pickle.dump(encoded, open('sb_encoded_tweets.pkl', 'wb'))
+    pickle.dump(encoder, open('../models/sb_encoder.pkl', 'wb'))
     # print embed_model.most_similar(positive=['shake', 'starbucks'], negative=['mcdonalds'], topn=5)

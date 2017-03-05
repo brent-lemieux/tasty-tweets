@@ -33,8 +33,8 @@ def kmeans(encoded_tweets, k, company):
     km = KMeans(n_clusters=k).fit(encoded_tweets)
     labels = km.labels_
     print np.unique(labels)
-    tweets = pickle.load(open('cmg_tweets_ae.pkl', 'rb'))
-    dates = pickle.load(open('cmg_dates_ae.pkl', 'rb'))
+    tweets = pickle.load(open('../../tweets/for_model/sb_tweets_ae.pkl', 'rb'))
+    dates = pickle.load(open('sb_dates_ae.pkl', 'rb'))
     df = pd.DataFrame({'tweets':tweets,
                         'date':dates,
                         'topic':labels})
@@ -42,7 +42,7 @@ def kmeans(encoded_tweets, k, company):
 
 
 # # Get stock data
-stock_file = '../stock_data/cmg_stock.csv'
+stock_file = '../stock_data/sb_stock.csv'
 stock_price = pd.read_csv(stock_file)
 stock_price['Description'] = 'Stock Price Change'
 # price_delta = stock['Stock Price Change'].tolist()[::-1]
@@ -80,7 +80,7 @@ def plot_topic_trend(df, topic_index, topic_name, vday=None, stock=[], refugee=N
     df1 = pd.DataFrame({'Date':dates, 'Data':topic_share})
     df1['Description'] = 'Topic Prevalance'
     df = pd.concat([df1, stock])
-    df.to_csv('../final_plots/cmg{}.csv'.format(topic_index[0]))
+    df.to_csv('../final_plots/sb{}.csv'.format(topic_index[0]))
 
 
 def create_cloud(df, company, k, topic_index):
@@ -155,7 +155,7 @@ def create_plots(vecs, k, company, encoder):
     dists = []
     for x in range(k):
         plt.close('all')
-        topic = 'ae_Chipotle{}'.format(x)
+        topic = 'ae_Starbucks{}'.format(x)
         create_cloud(df, company, k, x)
         plt.close('all')
         plot_topic_trend(df, [x], topic, vday=event2, stock=stock_price)
@@ -170,9 +170,9 @@ def create_plots(vecs, k, company, encoder):
 if __name__ == '__main__':
     plt.close('all')
     plt.style.use('ggplot')
-    vecs = pickle.load(open('cmg_encoded_tweets.pkl', 'rb'))
-    company = 'chipotle'
+    vecs = pickle.load(open('../../tweets/for_model/sb_encoded_tweets.pkl', 'rb'))
+    company = 'starbucks'
     k = 15
-    encoder = pickle.load(open('../models/cmg_encoder.pkl', 'rb'))
+    encoder = pickle.load(open('../models/sb_encoder.pkl', 'rb'))
     # embedder = pickle.load(open('../models/embed_model.pkl', 'rb'))
     dists = create_plots(vecs, k, company, encoder)
