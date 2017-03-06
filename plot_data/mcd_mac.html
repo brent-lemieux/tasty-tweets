@@ -28,7 +28,7 @@
           "use strict";
           var margin = 110,
               width = 900 - margin,
-              height = 600 - margin;
+              height = 640 - margin;
 
 
           var svg = d3.select("body")
@@ -43,39 +43,53 @@
         Dimple.js Chart construction code
       */
 
-          var myChart = new dimple.chart(svg, data);
-          var x = myChart.addTimeAxis("x", "Date");
-          var y = myChart.addMeasureAxis("y", "Data");
-          y.title = "Prevalance of Topic / Stock Price Change";
-          y.tickFormat = ",.3f";
-          x.dateParseFormat = "%m/%d/%Y";
-          x.tickFormat = "%m-%d";
-          x.timePeriod = d3.time.days;
-          x.timeInterval = 1;
-          x.ticks = 35;
-          y.overrideMin = -0.05;
-          y.overrideMax = 0.3;
+      var myChart = new dimple.chart(svg, data);
+      var x = myChart.addTimeAxis("x", "Date");
+      var y = myChart.addMeasureAxis("y", "Data");
+      y.title = "Prevalance of Topic / Stock Price Change";
+      y.tickFormat = ",.2%";
+      x.dateParseFormat = "%m/%d/%Y";
+      x.tickFormat = "%m-%d";
+      x.timePeriod = d3.time.days;
+      x.timeInterval = 1;
+      x.ticks = 35;
+      y.overrideMin = -0.05;
+      y.overrideMax = 0.45;
+      x.fontSize = "12px";
+      y.fontSize = "12px";
 
 
-          myChart.addSeries('Description', dimple.plot.line);
+      myChart.addSeries('Description', dimple.plot.line);
 
-          myChart.addLegend(650, 65, 100, 200, "left");
-          myChart.draw();
-          svg.append("text")
-            .attr("x", (width / 1.8))
-            .attr("y", 0 + (margin / 3))
-            .attr("text-anchor", "middle")
-            .style("font-size", "26px")
-            .style("font-family", "verdana")
-            .style("text-decoration", "bold")
-            .text("McDonalds Big Mac Topic Prevalance");
-          svg.append("line")
-            .style("stroke", "black")
-            .style("stroke-dasharray", ("3, 3"))
-            .attr("x1", 523)
-            .attr("y1", 60)
-            .attr("x2", 523)
-            .attr("y2", 545);
+      myChart.defaultColors = [
+          new dimple.color("#3498db"), // blue
+          new dimple.color("#2ecc71") // green
+      ];
+
+      myChart.addLegend(650, 65, 100, 200, "left");
+      myChart.draw();
+      svg.append("text")
+        .attr("x", (width / 1.7))
+        .attr("y", 0 + (margin / 3))
+        .attr("text-anchor", "middle")
+        .style("font-size", "26px")
+        .style("font-family", "verdana")
+        .style("text-decoration", "bold")
+        .text("McDonald's Big Mac Topic Prevalance");
+      svg.append("line")
+          .style("stroke", "black")
+          .style("stroke-dasharray", ("3, 3"))
+          .attr("x1", 190)
+          .attr("y1", 64)
+          .attr("x2", 190)
+          .attr("y2", 530);
+      svg.append("text")
+          .attr("x", 195)
+          .attr("y", 293)
+          .style("font-size", "11px")
+          .style("font-family", "arial")
+          .text("New Big Mac's Released");
+
 
         };
       </script>
