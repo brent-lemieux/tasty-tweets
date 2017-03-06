@@ -14,9 +14,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 def embed_tweets(f, company, train=True):
-    # This function creates word embeddings for each tweets.  It returns the
-    # embdding model as well as the embedded tweets.  It also returns a
-    # dataframe with the raw tweet and date for each tweet that has embeddings.
+    '''create word embeddings for tweets. return the embdding model as well as
+    the embedded tweets.  also returns a dataframe with the raw tweet and date
+    for each tweet that has embeddings.'''
     df = pd.read_csv(f)
     print df.values.shape
     tweets = [x.split(' ') for x in df['tweets'].tolist()]
@@ -47,6 +47,7 @@ def embed_tweets(f, company, train=True):
     return model, embedded_tweets, master_tweets, master_dates
 
 def tfidf(f, company):
+    '''get tfidf vectors and return the associated tweets and dates'''
     df = pd.read_csv(f)
     tweets = df[df['tweets'].str.contains(company)]['tweets'].values
     tf = TfidfVectorizer(stop_words='english', min_df=.001)
@@ -59,6 +60,7 @@ def tfidf(f, company):
 
 
 def autoencoder(x):
+    '''encode tfidf vectors into lower dimensional space'''
     x_train = x[5000:,:]
     x_test = x[:5000,:]
     input_cols= x.shape[1]

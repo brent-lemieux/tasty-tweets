@@ -1,5 +1,5 @@
-# Create and pickle a dictionary that maps twitter
-# slang to "proper" english
+'''Create and pickle a dictionary that maps twitter
+slang to "proper" english'''
 
 import pickle
 

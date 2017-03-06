@@ -1,3 +1,7 @@
+'''
+script used to file tweets by date before dates were being included in the
+extract_tweets.py script
+'''
 from to_csv import to_csv
 from clean_tweets import clean_pipeline
 from load_and_process import load_csv

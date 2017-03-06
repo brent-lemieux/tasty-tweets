@@ -31,7 +31,7 @@ feature_names = tf.get_feature_names()
 
 
 def print_top_words(model, feature_names, n_top_words):
-    # show top words for each cluster
+    '''show top words for each cluster'''
     words = []
     for topic_idx, topic in enumerate(model.components_):
         print("Topic #%d:" % topic_idx)
@@ -40,6 +40,7 @@ def print_top_words(model, feature_names, n_top_words):
 
 
 def find_k_clusters(ks, tf, X):
+    '''identify how many clusters to use for each sub-corpus'''
     recon_errors = []
     for k_clusters in ks:
         print k_clusters, 'Clusters'

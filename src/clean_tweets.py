@@ -6,6 +6,7 @@ from emotis import replace_emoji, map_dic
 
 
 def load_tweets(dirname):
+    '''load all tweets and return as a set to avoid repeats'''
     tweets = []
     for pkl_file in os.listdir(dirname):
         try:
@@ -15,6 +16,7 @@ def load_tweets(dirname):
     return list(set(tweets))
 
 def clean_tweets(tweets):
+    '''remove all unicode, unspecified punctuation, and convert to lower case'''
     cleaner_tweets = []
     for tweet in tweets:
         clean_tweet = []
@@ -25,6 +27,7 @@ def clean_tweets(tweets):
     return cleaner_tweets
 
 def cleaner_tweets(tweets):
+    '''remove links and retweets, as well as other special characters'''
     tweets = clean_tweets(tweets)
     cleaner_tweets = []
     lst_tweets = [tweet.split(' ') for tweet in tweets]
@@ -40,6 +43,7 @@ def cleaner_tweets(tweets):
 
 
 def clean_pipeline(dirname):
+    '''pipeline to clean all tweets and translate emojis'''
     master = []
     tweets = load_tweets(dirname)
     tweets = replace_emoji(tweets, map_dic)

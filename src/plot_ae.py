@@ -16,6 +16,7 @@ from collections import OrderedDict
 
 
 def find_k(encoded_tweets, k_cluster_range):
+    '''find the optimal number of topics for the autoencoder model'''
     scores = []
     for k in k_cluster_range:
         km = KMeans(n_clusters=k).fit(encoded_tweets)
@@ -28,6 +29,7 @@ def find_k(encoded_tweets, k_cluster_range):
 
 
 def kmeans(encoded_tweets, k, company):
+    '''take encoding vectors and separate into k topics'''
     encoded_tweets = np.array(encoded_tweets)
     print encoded_tweets.shape
     km = KMeans(n_clusters=k).fit(encoded_tweets)
@@ -49,6 +51,7 @@ stock_price['Description'] = 'Stock Price Change'
 
 
 def plot_topic_trend(df, topic_index, topic_name, vday=None, stock=[], refugee=None):
+    '''plot the prevalance of each topic overtime'''
     topic_share = []
     days = []
     dates = np.unique(df['date'])
@@ -84,6 +87,7 @@ def plot_topic_trend(df, topic_index, topic_name, vday=None, stock=[], refugee=N
 
 
 def create_cloud(df, company, k, topic_index):
+    '''create word clouds for each topic'''
     tweets = df
     stop = STOPWORDS.add(company)
     by_topic = tweets[tweets['topic']==topic_index]['tweets'].tolist()
@@ -96,8 +100,8 @@ def create_cloud(df, company, k, topic_index):
 
 
 def get_labeled_topics(encoder, km, company):
-    # create a DataFrame with topics and sentiment labels by applying model
-    # to labeled subset
+    '''create a DataFrame with topics and sentiment labels by applying the
+    model to labeled subset'''
     from load_and_process import load_xls
     df1 = load_xls('../../tweets/csv/test1.xls', slang=True, lemma=True, pos=False)
     df2 = load_xls('../../tweets/csv/test2.xls', slang=True, lemma=True, pos=False)
@@ -114,6 +118,8 @@ def get_labeled_topics(encoder, km, company):
 
 
 def topic_distributions(df, topic_name, topic_index):
+    '''create a distribution of sentiment for each topic by applying the
+    trained model to labeled tweets'''
     topic_df = df[df['topics'].isin(topic_index)]
     topic = topic_df.groupby('labels')['tweets'].agg(['count'])
     topic['pct_of_tweets'] = topic['count'] / len(topic_df)
@@ -133,6 +139,8 @@ def topic_distributions(df, topic_name, topic_index):
 
 
 def pca(vecs, labels):
+    '''reduce the encoded vectors into two dimensional space for a clustering
+    plot'''
     pcs = PCA(n_components=2).fit_transform(vecs)
     df = pd.DataFrame({'x':list(pcs[:,0].flatten()), 'y':list(pcs[:,1].flatten()), 'topics':labels})
     df = df[df['topics'] < 6]
@@ -144,6 +152,7 @@ def pca(vecs, labels):
 
 
 def create_plots(vecs, k, company, encoder):
+    '''use all of the plotting functions above to create plots for each topic'''
     df, km = kmeans(vecs, k, company)
     # labels = km.labels_
     # pca(vecs, labels)

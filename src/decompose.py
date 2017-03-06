@@ -36,6 +36,7 @@ n_top_words = 10
 
 
 def print_top_words(model, feature_names, n_top_words):
+    '''print the most important words for each topic'''
     words = []
     for topic_idx, topic in enumerate(model.components_):
         print("Topic #%d:" % topic_idx)
@@ -44,6 +45,7 @@ def print_top_words(model, feature_names, n_top_words):
 
 
 def tfidf(train, test):
+    '''convert tweets to tfidf vectors'''
     tf = TfidfVectorizer(max_features=n_features, ngram_range=ngrams, max_df=max_df, min_df=min_df,stop_words='english')
     train = tf.fit_transform(train)
     feature_names = tf.get_feature_names()
@@ -52,6 +54,8 @@ def tfidf(train, test):
 
 
 def decompose(model, train, test, tf):
+    '''apply decomposition method to tfidf matrix returning the assigned
+    index for each topic as well as the model'''
     feature_names = tf.get_feature_names()
     # model.fit(train)
     print_top_words(model, feature_names, n_top_words)
@@ -63,6 +67,7 @@ def decompose(model, train, test, tf):
 
 
 def topic_summaries(df, test_preds, mod_name):
+    '''apply topic model to labeled tweets to obtain a sentiment distribution'''
     df['topic'] = test_preds.tolist()
     file_dir = '../../tweets/topic_dfs/{}_sbux_topic_preds.csv'.format(mod_name)
     df.to_csv(file_dir)
@@ -73,6 +78,7 @@ def topic_summaries(df, test_preds, mod_name):
     return summary, topic_df
 
 def drill_topics(df, train_preds, mod1, labeled_df):
+    '''drill into topics to identify any subtopics within the main topic'''
     topic_df = df
     topic_df['topic'] = train_preds
     unique = list(np.unique(train_preds))

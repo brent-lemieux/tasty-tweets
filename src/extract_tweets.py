@@ -18,7 +18,8 @@ auth.set_access_token(access_token, access_secret)
 api = tweepy.API(auth)
 
 
-def get_tweets(topics, save_file_name,num_batches=25): # num_batches * 100 is total tweets target
+def get_tweets(topics, save_file_name, num_batches=25): 
+    '''extract and pickle tweets for specified topics using Twitter's API'''
     tweets = set()
     # public_tweets = api.home_timeline()
     for i in xrange(num_batches):

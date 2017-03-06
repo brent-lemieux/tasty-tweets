@@ -16,6 +16,7 @@ if not 'nlp' in locals():
 extra_stop = ['st', 'rd', 'ave']
 
 def load_xls(f, lemma=False, pos=False, slang=False):
+    '''load excel files and apply specified functions'''
     df = pd.read_excel(f)
     df.dropna(inplace=True)
     if df.columns.tolist()[0] != 'tweets':
@@ -29,6 +30,7 @@ def load_xls(f, lemma=False, pos=False, slang=False):
     return df
 
 def load_csv(f, lemma=False, pos=False, slang=False):
+    '''load csv files and apply specified functions'''
     df = pd.read_csv(f)
     df.dropna(inplace=True)
     if 'tweets' not in df.columns.tolist():
@@ -45,6 +47,8 @@ def load_csv(f, lemma=False, pos=False, slang=False):
     return df
 
 def lemm_pos_string(doc, stop_words=ENGLISH_STOP_WORDS):
+    '''only return words that spacy classifies as an adverb, adjective, or
+    verb -- also apply lemmatization'''
     parts_of_speech =[u'ADV', u'ADJ', u'VERB']
     doc = doc.replace('  ',' ')
     doc = doc.replace('_',' ')
@@ -54,6 +58,7 @@ def lemm_pos_string(doc, stop_words=ENGLISH_STOP_WORDS):
     return ' '.join(tokens)
 
 def lemm_string(doc, stop_words=ENGLISH_STOP_WORDS):
+    '''lemmatize the tweet -- returns each word to its base dictionary form'''
     doc = doc.replace('  ',' ')
     doc = unicode(doc)
     doc = nlp(doc)
@@ -62,6 +67,7 @@ def lemm_string(doc, stop_words=ENGLISH_STOP_WORDS):
 
 
 def convert_slang(doc, slang_dic=twitter_speak):
+    '''translate slange to "proper" english'''
     for k, v in slang_dic.iteritems():
         if k in doc:
             doc = doc.replace(k, v)
