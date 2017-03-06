@@ -3,8 +3,10 @@
     * **Latent Semantic Analysis** - This method utilizes tf-idf document representation models.
     * **Latent Dirichlet Allocation** - This method utilizes a term frequency vectorizer.
     * **Non-Negative Matrix Factorization** - This method utilizes tf-idf.
-    * **Autoencoder Topic Model  [(ATM)](https://www.prhlt.upv.es/workshops/iwes15/pdf/iwes15-kumar-d'haro.pdf "DATM")** - This method utilizes word embeddings to relate words used in similar context with one another.  It works by shrinking word representations into a smaller feature space, then attempting to recreate the original tweet.  I then take the first piece of the model that maps it into lower feature space and feed that into a clustering alogorithm.
-* Supervised and semi-supervised learning to classify sentiment of tweets in relation to brand
+    * **Deep Autoencoder Topic Model  [(ATM)](https://www.prhlt.upv.es/workshops/iwes15/pdf/iwes15-kumar-d'haro.pdf "DATM")** - For this method I tried two ways of representing text in vector form:
+        * Tf-idf
+        * Word Embeddings
+* Supervised learning to classify brand sentiment of tweets
     * **Supervised** - Hand labeled a subset of tweets and utilized various machine learning algorithms to classify sentiment.
 
 ## Final Methodologies and Process
@@ -38,17 +40,31 @@ Tf-idf is way to represent documents, or tweets in our case, in a numerical vect
 
 * **Inverse Document Frequency = log_e(Total number of tweets / Number of tweets with term t in it)**
 
-#### Non-Negative Matrix Factorization
-
-***Technical explanation coming soon...***
 
 #### Word Embeddings
 
 Word Embeddings are a way to represent each word in a vector space.  This is a recent breakthrough in Natural Language Processing which has led to huge gains in the field.  Each word in my vocabulary is assigned a vector based on how it is used in conjunction with other words.  I used the [Word2Vec model in gensim](https://radimrehurek.com/gensim/models/word2vec.html) to create my word embeddings.  My word embeddings were then fed into my autoencoder.
 
-Word embeddings are great at representing the meaning of words in vector space.  For instance **"burrito"** and **"cheeseburger"** are close to each other in vector space, but they are both far from **"president"**.  Word embeddings also allow for exploration of word interactions by adding and subtracting embeddings from each other. For instance, **Cheeseburger + Chipotle - McDonalds = Burrito** and **Shake + Starbucks - McDonalds = Latte**.  
+Word embeddings are great at representing the meaning of words in vector space.  For instance **"burrito"** and **"cheeseburger"** are close to each other in vector space, but they are both far from **"president"**.  Word embeddings also allow for exploration of word interactions by adding and subtracting embeddings from each other. For instance, **Cheeseburger + Chipotle - McDonalds = Burrito** and **Shake + Starbucks - McDonalds = Latte**.
+
+***I ended up not using this method as it appears not to work as well for unsupervised learning tasks.  There is no mechanism for an autoencoder to learn word importance to overall tweet meaning in an unsupervised setting, therefore the tf-idf outperforms (at least in my experience).***
 
 
-#### Autoencoder Topic Model
+#### Deep Autoencoder Topic Model
 
-***Technical explanation coming soon...***
+The autoencoder takes each tweet as an input, compresses it into lower dimensional space, and attempts to reconstruct the original input.  It then scores itself based on a loss function (I am currently using binary cross-entropy) and uses backpropagation to update the weights between the fully connected layers.
+
+To get the tweet representation in lower feature space, we take just the ***encode*** portion of the model and apply it to each tweet.  
+
+
+![Autoencoder Chart](/final_plots/autoencoder.png)
+
+
+#### K-Means Clustering
+
+Once we have the compressed version of tweets we can use k-means clustering to separate the tweets into latent topics.  For k-means to work, a number of clusters must be specified.  The algorithm randomly places cluster centroids in the appropriate dimensional space.  It then updates by assigning the new centroids to the mean value of the clusters that were assigned with random initialization.
+
+Here is how my first 5 clusters look when reduced to two-dimensions (using Principal Component Analysis):
+
+![K-Means](/final_plots/pca_ae_plot.png)
+***Note: I used a k-value of 15, not 5.  I reduced the number of topics to 5 here for illustration purposes***

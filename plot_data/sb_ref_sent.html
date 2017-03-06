@@ -50,10 +50,10 @@
           var y = myChart.addMeasureAxis("y", "Data");
           var mySeries = myChart.addSeries('Description', dimple.plot.bar);
           y.title = "Percentage of Labeled Tweets";
-          y.tickFormat = ",.2%";
+          y.tickFormat = ",%";
           y.overrideMax = 0.70;
-          x.fontSize = "13px";
-          y.fontSize = "13px";
+          x.fontSize = "18px";
+          y.fontSize = "18px";
 
           mySeries.addOrderRule(["Negative", "Neutral", "Positive"]);
 
@@ -69,10 +69,10 @@
 
 
           svg.append("text")
-            .attr("x", (width / 1.75))
+            .attr("x", (width / 1.65))
             .attr("y", 0 + (margin / 3))
             .attr("text-anchor", "middle")
-            .style("font-size", "26px")
+            .style("font-size", "30px")
             .style("font-family", "verdana")
             .style("text-decoration", "bold")
             .text("Starbucks Refugee Topic Sentiment Distribution");

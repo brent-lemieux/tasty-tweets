@@ -14,3 +14,5 @@ Keras Autoencoders - https://blog.keras.io/building-autoencoders-in-keras.html
 Spacy lemmatization - https://spacy.io/docs/usage/tutorials
 
 Gensim embeddings - https://radimrehurek.com/gensim/models/word2vec.html
+
+Dimple (d3.js API) - http://dimplejs.org/

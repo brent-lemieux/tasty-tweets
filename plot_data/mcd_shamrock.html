@@ -46,6 +46,7 @@
       var myChart = new dimple.chart(svg, data);
       var x = myChart.addTimeAxis("x", "Date");
       var y = myChart.addMeasureAxis("y", "Data");
+      var mySeries = myChart.addSeries('Description', dimple.plot.line);
       y.title = "Prevalance of Topic / Stock Price Change";
       y.tickFormat = ",.2%";
       x.dateParseFormat = "%m/%d/%Y";
@@ -55,38 +56,39 @@
       x.ticks = 35;
       y.overrideMin = -0.05;
       y.overrideMax = 0.45;
-      x.fontSize = "12px";
-      y.fontSize = "12px";
+      x.fontSize = "16px";
+      y.fontSize = "18px";
+      mySeries.lineWeight = "5";
 
 
-      myChart.addSeries('Description', dimple.plot.line);
+
 
       myChart.defaultColors = [
           new dimple.color("#3498db"), // blue
           new dimple.color("#2ecc71") // green
       ];
 
-      myChart.addLegend(650, 65, 100, 200, "left");
+      myChart.addLegend(750, 65, 100, 200, "left");
       myChart.draw();
       svg.append("text")
-        .attr("x", (width / 1.7))
+        .attr("x", (width / 1.65))
         .attr("y", 0 + (margin / 3))
         .attr("text-anchor", "middle")
-        .style("font-size", "26px")
+        .style("font-size", "32px")
         .style("font-family", "verdana")
         .style("text-decoration", "bold")
         .text("McDonald's Shamrock Shake Topic Prevalance");
       svg.append("line")
           .style("stroke", "black")
           .style("stroke-dasharray", ("3, 3"))
-          .attr("x1", 567)
+          .attr("x1", 581)
           .attr("y1", 64)
-          .attr("x2", 567)
+          .attr("x2", 581)
           .attr("y2", 530);
       svg.append("text")
-          .attr("x", 571)
+          .attr("x", 586)
           .attr("y", 293)
-          .style("font-size", "11px")
+          .style("font-size", "19px")
           .style("font-family", "arial")
           .text("Shamrock Shake Release");
         };
