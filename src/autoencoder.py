@@ -62,20 +62,17 @@ def autoencoder(x):
     x_train = x[5000:,:]
     x_test = x[:5000,:]
     input_cols= x.shape[1]
-    # input shape
     input_tweet = Input(shape=(input_cols,))
     encoded = Dense(60, activation='tanh')(input_tweet)
     encoded = Dense(30, activation='tanh')(encoded)
-    # reconstruct the input
     decoded = Dense(60, activation='tanh')(encoded)
     decoded = Dense(input_cols, activation='sigmoid')(decoded)
-    # model input to its reconstruction
+    # take in tweet and reconstruct it
     autoencoder = Model(input=input_tweet, output=decoded)
-    # model input to its encoded representation
+    # create encoder
     encoder = Model(input=input_tweet, output=encoded)
     # final layer encoder input shape
     encoded_input = Input(shape=(60,))
-    # setup decoder model
     decoder_layer = autoencoder.layers[-1]
     # create the decoder model
     decoder = Model(input=encoded_input, output=decoder_layer(encoded_input))
