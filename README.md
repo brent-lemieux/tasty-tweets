@@ -29,11 +29,11 @@ Starbucks was in the news quite a bit during the period I was collecting data.  
 
 Here is a word cloud of the most frequently used words for tweets that fall into the "refugee hiring" topic:
 ![Starbucks refugees](/final_plots/ae_starbucks4_cloud.png)
+
 Here is the sentiment distribution for this topic:
 
-
 ![Starbucks refugees](/final_plots/sbux_refugee_sent.png)
-And a time-series of the topic prevalance:
 
+And a time-series of the topic prevalance:
 
 ![Starbucks refugees](/final_plots/sbux_refugee.png)
