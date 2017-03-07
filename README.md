@@ -26,7 +26,7 @@ The final models I settled on are:
 I collected tweets for over a month, Jan. 27 through Feb. 28 of 2017, with the key words "Chipotle", "McDonalds", and "Starbucks".  This section details some of my more interesting findings from modeling the tweets surrounding these brands.
 
 ### Starbucks
-##### Refugee Hiring Announcement
+#### Refugee Hiring Announcement
 Starbucks was in the news quite a bit during the period I was collecting data.  On January 31, 2017 they announced that their plan to hire 10,000 refugees over the next five years.  Of course, in this day in age, this was quickly politicized.  
 
 Here is a word cloud of the most frequently used words for tweets that fall into the "refugee hiring" topic:
@@ -41,6 +41,6 @@ And finally, a time-series of the topic prevalence:
 
 ![Starbucks refugees](/final_plots/sbux_refugee.png)
 
-***I added day over day stock price change as a proxy for daily sales data.  Ideally, if I was working with the company, I would be able to show actual revenue numbers to infer how topics really affect the business.***
+***Note:  I added day over day stock price change as a proxy for daily sales data.  Ideally, if I was working with the company, I would be able to show actual revenue numbers to infer how topics really affect the business.***
 
 As you can see, the sentiment surrounding the topic is mostly negative (at least on Twitter).  However, the topic prevalence, while very significant at first, quickly fades from public discussion.  It does not appear to be an issue that Starbucks need to address.

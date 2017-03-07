@@ -50,7 +50,7 @@ def tfidf(f, company):
     '''get tfidf vectors and return the associated tweets and dates'''
     df = pd.read_csv(f)
     tweets = df[df['tweets'].str.contains(company)]['tweets'].values
-    tf = TfidfVectorizer(stop_words='english', min_df=.001)
+    tf = TfidfVectorizer(stop_words='english', min_df=.001, ngram_range=[1,3])
     tf.fit(tweets)
     pickle.dump(tf, open('tfidf_ae.pkl', 'wb'))
     vecs = tf.transform(tweets).todense()
