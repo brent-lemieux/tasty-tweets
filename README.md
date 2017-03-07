@@ -2,12 +2,14 @@
 Topic modeling and sentiment analysis of popular food and beverage chains on Twitter using Natural Language Processing and Machine Learning
 
 ## Project Introduction
+Everyday, millions of people share their opinions on products and brands.  The goal of this project is to gain insight into what consumers are saying without spending countless hours reading through and cataloging millions of tweets.
+
 * What are our customers saying about our brand on social media?  
 * Is it positive, negative, or neutral?
 * Are some aspects of our brand held in higher regard than others? (i.e. food, service, experience, etc.)
 * Is the conversation a short blip or a persistent trend?
 
-The focus of this project is to answer the questions above for three popular food and beverage brands: Chipotle Mexican Grill, Starbucks, and McDonalds.  The overall goal is to create a framework to answer these questions for any popular brand, product, or topic.
+The focus of this project is to answer the questions above for three popular food and beverage brands: Chipotle Mexican Grill, Starbucks, and McDonalds.  
 
 
 ## Modeling Methodology
@@ -34,6 +36,11 @@ Here is the sentiment distribution for this topic:
 
 ![Starbucks refugees](/final_plots/sbux_refugee_sent.png)
 
-And a time-series of the topic prevalance:
+
+And finally, a time-series of the topic prevalence:
 
 ![Starbucks refugees](/final_plots/sbux_refugee.png)
+
+***I added day over day stock price change as a proxy for daily sales data.  Ideally, if I was working with the company, I would be able to show actual revenue numbers to infer how topics really affect the business.***
+
+As you can see, the sentiment surrounding the topic is mostly negative (at least on Twitter).  However, the topic prevalence, while very significant at first, quickly fades from public discussion.  It does not appear to be an issue that Starbucks need to address.

@@ -47,7 +47,7 @@
           var x = myChart.addTimeAxis("x", "Date");
           var y = myChart.addMeasureAxis("y", "Data");
 
-          y.title = "Prevalance of Topic / Stock Price Change";
+          y.title = "Prevalence of Topic / Stock Price Change";
           y.tickFormat = ",%";
           x.dateParseFormat = "%m/%d/%Y";
           x.tickFormat = "%m-%d";
@@ -67,7 +67,7 @@
               new dimple.color("#2ecc71") // green
           ];
 
-          myChart.addLegend(650, 65, 100, 200, "left");
+          myChart.addLegend(725, 65, 100, 200, "left");
           myChart.draw();
           svg.append("text")
             .attr("x", (width / 1.7))
@@ -76,7 +76,7 @@
             .style("font-size", "40px")
             .style("font-family", "verdana")
             .style("text-decoration", "bold")
-            .text("Starbucks Refugee Topic Prevalance");
+            .text("Starbucks Refugee Topic Prevalence");
           svg.append("line")
             .style("stroke", "black")
             .style("stroke-dasharray", ("3, 3"))
@@ -86,7 +86,7 @@
             .attr("x2", 189)
             .attr("y2", 530);
           svg.append("text")
-            .attr("x", 195)
+            .attr("x", 200)
             .attr("y", 97)
             .style("font-size", "19px")
             .style("font-family", "arial")

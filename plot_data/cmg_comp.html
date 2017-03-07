@@ -46,8 +46,8 @@
   var myChart = new dimple.chart(svg, data);
   var x = myChart.addTimeAxis("x", "Date");
   var y = myChart.addMeasureAxis("y", "Data");
-  y.title = "Prevalance of Topic / Stock Price Change";
-  y.tickFormat = ",.2%";
+  y.title = "Prevalence of Topic / Stock Price Change";
+  y.tickFormat = ",%";
   x.dateParseFormat = "%m/%d/%Y";
   x.tickFormat = "%m-%d";
   x.timePeriod = d3.time.days;
@@ -55,8 +55,8 @@
   x.ticks = 35;
   y.overrideMin = -0.05;
   y.overrideMax = 0.45;
-  x.fontSize = "12px";
-  y.fontSize = "12px";
+  x.fontSize = "16px";
+  y.fontSize = "18px";
 
 
   myChart.addSeries('Description', dimple.plot.line);
@@ -66,16 +66,16 @@
       new dimple.color("#2ecc71") // green
   ];
 
-  myChart.addLegend(650, 65, 100, 200, "left");
+  myChart.addLegend(750, 65, 100, 200, "left");
   myChart.draw();
   svg.append("text")
-    .attr("x", (width / 1.7))
+    .attr("x", (width / 1.65))
     .attr("y", 0 + (margin / 3))
     .attr("text-anchor", "middle")
-    .style("font-size", "26px")
+    .style("font-size", "36px")
     .style("font-family", "verdana")
     .style("text-decoration", "bold")
-    .text("Chipotle vs. Competitors Topic Prevalance");
+    .text("Chipotle vs. Competitors Topic Prevalence");
 
     };
       </script>

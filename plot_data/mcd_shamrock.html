@@ -47,7 +47,7 @@
       var x = myChart.addTimeAxis("x", "Date");
       var y = myChart.addMeasureAxis("y", "Data");
       var mySeries = myChart.addSeries('Description', dimple.plot.line);
-      y.title = "Prevalance of Topic / Stock Price Change";
+      y.title = "Prevalence of Topic / Stock Price Change";
       y.tickFormat = ",.2%";
       x.dateParseFormat = "%m/%d/%Y";
       x.tickFormat = "%m-%d";
@@ -77,7 +77,7 @@
         .style("font-size", "32px")
         .style("font-family", "verdana")
         .style("text-decoration", "bold")
-        .text("McDonald's Shamrock Shake Topic Prevalance");
+        .text("McDonald's Shamrock Shake Topic Prevalence");
       svg.append("line")
           .style("stroke", "black")
           .style("stroke-dasharray", ("3, 3"))

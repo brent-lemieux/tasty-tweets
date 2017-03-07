@@ -1,59 +1,1 @@
-,Data,Date,Description
-0,0.0670515097691,2017-01-27,Topic Prevalance
-1,0.0455326460481,2017-01-31,Topic Prevalance
-2,0.0483170466884,2017-02-01,Topic Prevalance
-3,0.063829787234,2017-02-06,Topic Prevalance
-4,0.0714975845411,2017-02-07,Topic Prevalance
-5,0.0648148148148,2017-02-08,Topic Prevalance
-6,0.0649984095006,2017-02-09,Topic Prevalance
-7,0.0548780487805,2017-02-10,Topic Prevalance
-8,0.0520833333333,2017-02-11,Topic Prevalance
-9,0.0596537949401,2017-02-12,Topic Prevalance
-10,0.06609153385,2017-02-13,Topic Prevalance
-11,0.0660120021822,2017-02-14,Topic Prevalance
-12,0.0724841660802,2017-02-15,Topic Prevalance
-13,0.0736263736264,2017-02-16,Topic Prevalance
-14,0.0708798017348,2017-02-17,Topic Prevalance
-15,0.0620110113011,2017-02-18,Topic Prevalance
-16,0.0728893550079,2017-02-19,Topic Prevalance
-17,0.0640148011101,2017-02-20,Topic Prevalance
-18,0.0746467608638,2017-02-21,Topic Prevalance
-19,0.0685421994885,2017-02-22,Topic Prevalance
-20,0.066118593668,2017-02-23,Topic Prevalance
-21,0.0650054171181,2017-02-24,Topic Prevalance
-22,0.0729783037475,2017-02-26,Topic Prevalance
-23,0.0613967766692,2017-02-27,Topic Prevalance
-24,0.0603720050441,2017-02-28,Topic Prevalance
-0,0.001585065,2/28/17,Stock Price Change
-1,-0.012178149,2/27/17,Stock Price Change
-2,0.0,2/26/17,Stock Price Change
-3,0.0,2/25/17,Stock Price Change
-4,-0.00277585,2/24/17,Stock Price Change
-5,0.001215911,2/23/17,Stock Price Change
-6,0.000521376,2/22/17,Stock Price Change
-7,0.00331299,2/21/17,Stock Price Change
-8,0.0,2/20/17,Stock Price Change
-9,0.0,2/19/17,Stock Price Change
-10,0.0,2/18/17,Stock Price Change
-11,0.010928962,2/17/17,Stock Price Change
-12,-0.002286317,2/16/17,Stock Price Change
-13,0.004948745,2/15/17,Stock Price Change
-14,0.008376403,2/14/17,Stock Price Change
-15,-0.001956599,2/13/17,Stock Price Change
-16,0.0,2/12/17,Stock Price Change
-17,0.0,2/11/17,Stock Price Change
-18,0.007346354,2/10/17,Stock Price Change
-19,0.010684535,2/9/17,Stock Price Change
-20,-0.000362056,2/8/17,Stock Price Change
-21,-0.008792392,2/7/17,Stock Price Change
-22,0.012168543,2/6/17,Stock Price Change
-23,0.0,2/5/17,Stock Price Change
-24,0.0,2/4/17,Stock Price Change
-25,0.022090217,2/3/17,Stock Price Change
-26,-0.000556586,2/2/17,Stock Price Change
-27,-0.023904382,2/1/17,Stock Price Change
-28,-0.01216458,1/31/17,Stock Price Change
-29,-0.003920171,1/30/17,Stock Price Change
-30,0.0,1/29/17,Stock Price Change
-31,0.0,1/28/17,Stock Price Change
-32,-0.040027369,1/27/17,Stock Price Change
+,Data,Date,Description0,0.06705151,1/27/17,Topic Prevalence1,0.045532646,1/31/17,Topic Prevalence2,0.048317047,2/1/17,Topic Prevalence3,0.063829787,2/6/17,Topic Prevalence4,0.071497585,2/7/17,Topic Prevalence5,0.064814815,2/8/17,Topic Prevalence6,0.06499841,2/9/17,Topic Prevalence7,0.054878049,2/10/17,Topic Prevalence8,0.052083333,2/11/17,Topic Prevalence9,0.059653795,2/12/17,Topic Prevalence10,0.066091534,2/13/17,Topic Prevalence11,0.066012002,2/14/17,Topic Prevalence12,0.072484166,2/15/17,Topic Prevalence13,0.073626374,2/16/17,Topic Prevalence14,0.070879802,2/17/17,Topic Prevalence15,0.062011011,2/18/17,Topic Prevalence16,0.072889355,2/19/17,Topic Prevalence17,0.064014801,2/20/17,Topic Prevalence18,0.074646761,2/21/17,Topic Prevalence19,0.068542199,2/22/17,Topic Prevalence20,0.066118594,2/23/17,Topic Prevalence21,0.065005417,2/24/17,Topic Prevalence22,0.072978304,2/26/17,Topic Prevalence23,0.061396777,2/27/17,Topic Prevalence24,0.060372005,2/28/17,Topic Prevalence0,0.001585065,2/28/17,Stock Price Change1,-0.012178149,2/27/17,Stock Price Change2,0,2/26/17,Stock Price Change3,0,2/25/17,Stock Price Change4,-0.00277585,2/24/17,Stock Price Change5,0.001215911,2/23/17,Stock Price Change6,0.000521376,2/22/17,Stock Price Change7,0.00331299,2/21/17,Stock Price Change8,0,2/20/17,Stock Price Change9,0,2/19/17,Stock Price Change10,0,2/18/17,Stock Price Change11,0.010928962,2/17/17,Stock Price Change12,-0.002286317,2/16/17,Stock Price Change13,0.004948745,2/15/17,Stock Price Change14,0.008376403,2/14/17,Stock Price Change15,-0.001956599,2/13/17,Stock Price Change16,0,2/12/17,Stock Price Change17,0,2/11/17,Stock Price Change18,0.007346354,2/10/17,Stock Price Change19,0.010684535,2/9/17,Stock Price Change20,-0.000362056,2/8/17,Stock Price Change21,-0.008792392,2/7/17,Stock Price Change22,0.012168543,2/6/17,Stock Price Change23,0,2/5/17,Stock Price Change24,0,2/4/17,Stock Price Change25,0.022090217,2/3/17,Stock Price Change26,-0.000556586,2/2/17,Stock Price Change27,-0.023904382,2/1/17,Stock Price Change28,-0.01216458,1/31/17,Stock Price Change29,-0.003920171,1/30/17,Stock Price Change30,0,1/29/17,Stock Price Change31,0,1/28/17,Stock Price Change32,-0.040027369,1/27/17,Stock Price Change
