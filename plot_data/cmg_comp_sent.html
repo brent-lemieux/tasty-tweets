@@ -50,10 +50,10 @@
           var y = myChart.addMeasureAxis("y", "Data");
           var mySeries = myChart.addSeries(["Description", "Sentiment"], dimple.plot.bar);
           y.title = "Percentage of Labeled Tweets";
-          y.tickFormat = ",.2%";
+          y.tickFormat = ",%";
           y.overrideMax = 0.70;
-          x.fontSize = "13px";
-          y.fontSize = "13px";
+          x.fontSize = "16px";
+          y.fontSize = "18px";
 
 
           mySeries.addOrderRule("Description", false);

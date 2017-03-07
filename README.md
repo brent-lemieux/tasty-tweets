@@ -44,3 +44,11 @@ And finally, a time-series of the topic prevalence:
 ***Note:  I added day over day stock price change as a proxy for daily sales data.  Ideally, if I was working with the company, I would be able to show actual revenue numbers to infer how topics really affect the business.***
 
 As you can see, the sentiment surrounding the topic is mostly negative (at least on Twitter).  However, the topic prevalence, while very significant at first, quickly fades from public discussion.  It does not appear to be an issue that Starbucks need to address.
+
+### Chipotle
+#### Chipotle vs. the Competition
+
+A small but constant portion of tweets about Chipotle, discuss Chipotle in reference to the competition (i.e. Qdoba, Moe's)
+
+Here's a word cloud associated with this topic:
+![Chipotle vs.](/final_plots/ae_chipotle13_cloud.png)
