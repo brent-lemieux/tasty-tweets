@@ -52,3 +52,13 @@ A small but constant portion of tweets about Chipotle, discuss Chipotle in refer
 
 Here's a word cloud associated with this topic:
 ![Chipotle vs.](/final_plots/ae_chipotle13_cloud.png)
+
+After "eat" and "qdoba", words like "better" and "gt" (greater than) stand out.  A lot of tweets in this topic are comparing two or more burrito restaurants.  
+
+Here is how Chipotle stacks up:
+
+![Chipotle sentiment](/final_plots/cmg_comp_sent.png)
+
+This next plot shows the prevalence of this topic overtime.  It bounces around a little bit but tends to fall between 5 and 10 percent.
+
+![Chipotle time-series](/final_plots/cmg_comp.png)
