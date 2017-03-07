@@ -30,6 +30,7 @@ I collected tweets for over a month, Jan. 27 through Feb. 28 of 2017, with the k
 Starbucks was in the news quite a bit during the period I was collecting data.  On January 31, 2017 they announced that their plan to hire 10,000 refugees over the next five years.  Of course, in this day in age, this was quickly politicized.  
 
 Here is a word cloud of the most frequently used words for tweets that fall into the "refugee hiring" topic:
+
 ![Starbucks refugees](/final_plots/ae_starbucks4_cloud.png)
 
 Here is the sentiment distribution for this topic:
@@ -51,6 +52,7 @@ As you can see, the sentiment surrounding the topic is mostly negative (at least
 A small but constant portion of tweets about Chipotle, discuss Chipotle in reference to the competition (i.e. Qdoba, Moe's)
 
 Here's a word cloud associated with this topic:
+
 ![Chipotle vs.](/final_plots/ae_chipotle13_cloud.png)
 
 After "eat" and "qdoba", words like "better" and "gt" (greater than) stand out.  A lot of tweets in this topic are comparing two or more burrito restaurants.  
