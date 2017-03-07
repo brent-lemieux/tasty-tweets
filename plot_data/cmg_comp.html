@@ -46,6 +46,7 @@
   var myChart = new dimple.chart(svg, data);
   var x = myChart.addTimeAxis("x", "Date");
   var y = myChart.addMeasureAxis("y", "Data");
+  var mySeries = myChart.addSeries('Description', dimple.plot.line);
   y.title = "Prevalence of Topic / Stock Price Change";
   y.tickFormat = ",%";
   x.dateParseFormat = "%m/%d/%Y";
@@ -57,9 +58,9 @@
   y.overrideMax = 0.45;
   x.fontSize = "16px";
   y.fontSize = "18px";
+  mySeries.lineWeight = "5";
 
 
-  myChart.addSeries('Description', dimple.plot.line);
 
   myChart.defaultColors = [
       new dimple.color("#3498db"), // blue

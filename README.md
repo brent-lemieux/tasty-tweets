@@ -9,7 +9,7 @@ Everyday, millions of people share their opinions on products and brands.  The g
 * Are some aspects of our brand held in higher regard than others? (i.e. food, service, experience, etc.)
 * Is the conversation a short blip or a persistent trend?
 
-The focus of this project is to answer the questions above for three popular food and beverage brands: Chipotle Mexican Grill, Starbucks, and McDonalds.  
+The focus of this project is to answer the questions above for three popular food and beverage brands: Chipotle Mexican Grill, Starbucks, and McDonald's.  
 
 
 ## Modeling Methodology
@@ -23,7 +23,7 @@ The final models I settled on are:
 
 ## Insights
 
-I collected tweets for over a month, Jan. 27 through Feb. 28 of 2017, with the key words "Chipotle", "McDonalds", and "Starbucks".  This section details some of my more interesting findings from modeling the tweets surrounding these brands.
+I collected tweets for over a month, Jan. 27 through Feb. 28 of 2017, with the key words "Chipotle", "McDonald's", and "Starbucks".  This section details some of my more interesting findings from modeling the tweets surrounding these brands.
 
 ### Starbucks
 #### Refugee Hiring Announcement
@@ -62,3 +62,28 @@ Here is how Chipotle stacks up:
 This next plot shows the prevalence of this topic overtime.  It bounces around a little bit but tends to fall between 5 and 10 percent.
 
 ![Chipotle time-series](/final_plots/cmg_comp.png)
+
+In this instance, my model provides a framework for companies to track their public opinion in relation to their competitors.
+
+### McDonald's
+#### McDonald's Shamrock Shake Release
+
+Each year McDonald's releases the Shamrock Shake about a month before St. Patricks Day.  This year, along with the release of the shake, McDonald's also released a special edition "innovative" straw for maximum shake enjoyment.  
+
+This word cloud shows words frequently used in tweeting about the Shamrock Shake / straw topic.
+
+![McDonald's Shamrock](/final_plots/ae_mcdonalds6_cloud.png)
+
+Next we see that the sentiment distribution is mostly positive with some negative.  Most of the negative tweets that fall into this topic are people making jabs at McDonald's for calling a straw innovative.
+
+![McDonald's sentiment](/final_plots/mcd_shamrock_sent.png)
+
+Lastly, we'll look at the topic prevalence over time.  Notice that hype begins to build a few days ahead of the release, and that it lasts for a little over a week afterwards.
+
+![McDonald's time-series](/final_plots/mcd_shamrock.png)  
+
+## Summary
+
+The framework laid out here shows how companies can track topic prevalence and sentiment around events ranging from advertising campaigns and product releases to public relations issues.
+
+If you would like to contact me about the project or data science in general, please email me at **blemieux4@gmail.com**
