@@ -9,48 +9,14 @@ import numpy as np
 import pickle
 
 import logging
-from gensim.models import Word2Vec
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-
-def embed_tweets(f, company, train=True):
-    '''create word embeddings for tweets. return the embdding model as well as
-    the embedded tweets.  also returns a dataframe with the raw tweet and date
-    for each tweet that has embeddings.'''
-    df = pd.read_csv(f)
-    print df.values.shape
-    tweets = [x.split(' ') for x in df['tweets'].tolist()]
-    dates = df['date'].tolist()
-    if train:
-        model = Word2Vec(tweets, size=60, min_count=20, workers=3)
-    else:
-        model = pickle.load(open('../models/embed_model.pkl', 'rb'))
-    tweets_dt = [(tweet, date) for tweet, date in zip(tweets, dates) if company in tweet]
-    print len(tweets_dt)
-    embedded_tweets = []
-    master_tweets = []
-    master_dates = []
-    for tweet, date in tweets_dt:
-        try:
-            matrix = np.zeros((30, 60))
-            for idx, word in enumerate(tweet):
-                try:
-                    matrix[idx,:] = model[word]
-                except:
-                    matrix[idx,:] = np.zeros((60))
-            embedded_tweets.append(np.reshape(matrix,1800))
-            # print np.max(np.reshape(matrix,3000))
-            master_tweets.append(' '.join(tweet))
-            master_dates.append(date)
-        except:
-            pass
-    return model, embedded_tweets, master_tweets, master_dates
 
 def tfidf(f, company):
     '''get tfidf vectors and return the associated tweets and dates'''
     df = pd.read_csv(f)
     tweets = df[df['tweets'].str.contains(company)]['tweets'].values
-    tf = TfidfVectorizer(stop_words='english', min_df=.001, ngram_range=[1,3])
+    tf = TfidfVectorizer(stop_words='english', min_df=.001, ngram_range=[1,2])
     tf.fit(tweets)
     pickle.dump(tf, open('tfidf_ae.pkl', 'wb'))
     vecs = tf.transform(tweets).todense()
@@ -90,12 +56,9 @@ def autoencoder(x):
 
 
 if __name__ == '__main__':
-    # embed_model, embeddings, tweets, dates = embed_tweets('../../tweets/csv/clean_master.csv', 'starbucks', train=False)
-    # pickle.dump(embed_model, open('../models/embed_model.pkl', 'wb'))
     tf_vecs, tweets, dates = tfidf('../../tweets/csv/clean_master.csv', 'starbucks')
     pickle.dump(tweets, open('../../tweets/for_model/sb_tweets_ae.pkl', 'wb'))
     pickle.dump(dates, open('sb_dates_ae.pkl', 'wb'))
     encoded, encoder = autoencoder(tf_vecs)
     pickle.dump(encoded, open('../../tweets/for_model/sb_encoded_tweets.pkl', 'wb'))
     pickle.dump(encoder, open('../models/sb_encoder.pkl', 'wb'))
-    # print embed_model.most_similar(positive=['shake', 'starbucks'], negative=['mcdonalds'], topn=5)

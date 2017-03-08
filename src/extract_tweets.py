@@ -18,7 +18,7 @@ auth.set_access_token(access_token, access_secret)
 api = tweepy.API(auth)
 
 
-def get_tweets(topics, save_file_name, num_batches=25): 
+def get_tweets(topics, save_file_name, num_batches=25):
     '''extract and pickle tweets for specified topics using Twitter's API'''
     tweets = set()
     # public_tweets = api.home_timeline()
@@ -28,18 +28,18 @@ def get_tweets(topics, save_file_name, num_batches=25):
                 print 'Loading', i+1, 'of', num_batches, 'batches of', topic, 'tweets'
                 for tweet in tweepy.Cursor(api.search, q=topic).items(100):
                     if tweet.lang == 'en':
-                        tweets.add(tweet.text)
+                        tweets.add((tweet.text, tweet.created_at))
                 time.sleep(35)
             except:
                 print 'Waiting for API to allow more calls...'
                 time.sleep(10)
                 pass
+    tweets = list(tweets)
     pickle.dump( tweets, open( "{}.pkl".format(save_file_name), "wb" ) )
     print 'Succesfully pickled', len(tweets), 'tweets!'
+    return tweets
 
 
 
 if __name__ == '__main__':
-    # get_tweets(['amazon'], '../../tweets/amazon0301', 100)
-    get_tweets(['chipotle', 'mcdonalds', 'starbucks'], '../../tweets/food/food0301b', 100)
-    # get_tweets(['economy', 'market', 'wall st', 'stocks'], '../../tweets/econ/econ0219a', 30)
+    tweets = get_tweets(['snapchat'], '../../tweets/snap/snap0308', 1)
