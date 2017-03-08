@@ -86,6 +86,6 @@ Lastly, we'll look at the topic prevalence over time.  Notice that hype begins t
 
 ## Summary
 
-The framework laid out here shows how companies can track topic prevalence and sentiment around events ranging from advertising campaigns and product releases to public relations issues.
+The framework laid out here shows how companies can track topic prevalence and sentiment around events ranging from advertising campaigns and product releases to public relations issues without the tedium of reading through millions of tweets.
 
 If you would like to contact me about the project or data science in general, please email me at **blemieux4@gmail.com**

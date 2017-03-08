@@ -52,8 +52,8 @@
           y.title = "Percentage of Labeled Tweets";
           y.tickFormat = ",%";
           y.overrideMax = 0.70;
-          x.fontSize = "18px";
-          y.fontSize = "18px";
+          x.fontSize = "20px";
+          y.fontSize = "20px";
 
           mySeries.addOrderRule(["Negative", "Neutral", "Positive"]);
 
@@ -69,10 +69,10 @@
 
 
           svg.append("text")
-            .attr("x", (width / 1.65))
+            .attr("x", (width / 1.58))
             .attr("y", 0 + (margin / 3))
             .attr("text-anchor", "middle")
-            .style("font-size", "30px")
+            .style("font-size", "33px")
             .style("font-family", "verdana")
             .style("text-decoration", "bold")
             .text("Starbucks Refugee Topic Sentiment Distribution");

@@ -52,12 +52,12 @@
           x.dateParseFormat = "%m/%d/%Y";
           x.tickFormat = "%m-%d";
           x.timePeriod = d3.time.days;
-          x.timeInterval = 1;
+          x.timeInterval = 4;
           x.ticks = 35;
           y.overrideMin = -0.05;
           y.overrideMax = 0.45;
-          x.fontSize = "16px";
-          y.fontSize = "18px";
+          x.fontSize = "20px";
+          y.fontSize = "20px";
 
 
           var mySeries = myChart.addSeries('Description', dimple.plot.line);
@@ -67,10 +67,10 @@
               new dimple.color("#2ecc71") // green
           ];
 
-          myChart.addLegend(725, 65, 100, 200, "left");
+          myChart.addLegend(785, 65, 100, 200, "left");
           myChart.draw();
           svg.append("text")
-            .attr("x", (width / 1.7))
+            .attr("x", (width / 1.65))
             .attr("y", 0 + (margin / 3))
             .attr("text-anchor", "middle")
             .style("font-size", "40px")
@@ -81,14 +81,14 @@
             .style("stroke", "black")
             .style("stroke-dasharray", ("3, 3"))
             .style("line-weight", 3)
-            .attr("x1", 189)
+            .attr("x1", 201)
             .attr("y1", 65)
-            .attr("x2", 189)
+            .attr("x2", 201)
             .attr("y2", 530);
           svg.append("text")
-            .attr("x", 200)
+            .attr("x", 210)
             .attr("y", 97)
-            .style("font-size", "19px")
+            .style("font-size", "20px")
             .style("font-family", "arial")
             .text("Refugee Hiring Announcement");
 

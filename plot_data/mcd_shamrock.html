@@ -48,16 +48,16 @@
       var y = myChart.addMeasureAxis("y", "Data");
       var mySeries = myChart.addSeries('Description', dimple.plot.line);
       y.title = "Prevalence of Topic / Stock Price Change";
-      y.tickFormat = ",.2%";
+      y.tickFormat = ",%";
       x.dateParseFormat = "%m/%d/%Y";
       x.tickFormat = "%m-%d";
       x.timePeriod = d3.time.days;
-      x.timeInterval = 1;
+      x.timeInterval = 4;
       x.ticks = 35;
       y.overrideMin = -0.05;
       y.overrideMax = 0.45;
-      x.fontSize = "16px";
-      y.fontSize = "18px";
+      x.fontSize = "20px";
+      y.fontSize = "20px";
       mySeries.lineWeight = "5";
 
 
@@ -88,7 +88,7 @@
       svg.append("text")
           .attr("x", 586)
           .attr("y", 293)
-          .style("font-size", "19px")
+          .style("font-size", "20px")
           .style("font-family", "arial")
           .text("Shamrock Shake Release");
         };

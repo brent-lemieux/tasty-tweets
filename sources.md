@@ -16,3 +16,5 @@ Spacy lemmatization - https://spacy.io/docs/usage/tutorials
 Gensim embeddings - https://radimrehurek.com/gensim/models/word2vec.html
 
 Dimple (d3.js API) - http://dimplejs.org/
+
+Udacity Data Visualization Course - udacity.com
