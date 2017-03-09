@@ -3,7 +3,7 @@
     * **Latent Semantic Analysis** - This method utilizes tf-idf document representation models.
     * **Latent Dirichlet Allocation** - This method utilizes a term frequency vectorizer.
     * **Non-Negative Matrix Factorization** - This method utilizes tf-idf.
-    * **Deep Autoencoder Topic Model  [(ATM)](https://www.prhlt.upv.es/workshops/iwes15/pdf/iwes15-kumar-d'haro.pdf "DATM")** - For this method I tried two ways of representing text in vector form:
+    * **Deep Autoencoder Topic Model  [(DATM)](https://www.prhlt.upv.es/workshops/iwes15/pdf/iwes15-kumar-d'haro.pdf "DATM")** - For this method I tried two ways of representing text in vector form:
         * Tf-idf
         * Word Embeddings
 * Supervised learning to classify brand sentiment of tweets
