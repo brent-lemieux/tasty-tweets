@@ -67,4 +67,5 @@ Once we have the compressed version of tweets we can use k-means clustering to s
 Here is how my first 5 clusters look when reduced to two-dimensions (using Principal Component Analysis):
 
 ![K-Means](/final_plots/pca_ae_plot.png)
+
 ***Note: I used a k-value of 15, not 5.  I reduced the number of topics to 5 here for illustration purposes***
