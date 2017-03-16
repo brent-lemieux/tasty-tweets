@@ -3,7 +3,7 @@
     * **Latent Semantic Analysis** - This method utilizes tf-idf document representation models.
     * **Latent Dirichlet Allocation** - This method utilizes a term frequency vectorizer.
     * **Non-Negative Matrix Factorization** - This method utilizes tf-idf.
-    * **Deep Autoencoder Topic Model  [(ATM)](https://www.prhlt.upv.es/workshops/iwes15/pdf/iwes15-kumar-d'haro.pdf "DATM")** - For this method I tried two ways of representing text in vector form:
+    * **Deep Autoencoder Topic Model  [(DATM)](https://www.prhlt.upv.es/workshops/iwes15/pdf/iwes15-kumar-d'haro.pdf "DATM")** - For this method I tried two ways of representing text in vector form:
         * Tf-idf
         * Word Embeddings
 * Supervised learning to classify brand sentiment of tweets
@@ -67,4 +67,5 @@ Once we have the compressed version of tweets we can use k-means clustering to s
 Here is how my first 5 clusters look when reduced to two-dimensions (using Principal Component Analysis):
 
 ![K-Means](/final_plots/pca_ae_plot.png)
+
 ***Note: I used a k-value of 15, not 5.  I reduced the number of topics to 5 here for illustration purposes***
