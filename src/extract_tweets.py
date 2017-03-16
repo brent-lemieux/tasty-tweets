@@ -49,4 +49,5 @@ def get_tweets(topics, save_file_name, num_batches=25):
 
 
 if __name__ == '__main__':
-    tweets = get_tweets(['ncaa', 'guinness'], '../../tweets/snap/snap0308', 10)
+    date = time.strftime("%m-%d-%Y--%H-%M")
+    tweets = get_tweets(['ncaa', 'guinness'], '../../tweets/tweets-{}'.format(date), 10)
