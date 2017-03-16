@@ -79,10 +79,10 @@ def clean_pipeline(dirname):
     tweets = load_tweets(dirname)
     tweets = replace_emoji(tweets, map_dic)
     tweets = cleaner_tweets(tweets)
-    return tweets
+    df = pd.DataFrame(tweets, columns=['tweets', 'dates'])
+    df['dates'] = df['dates'].map(lambda x: str(x)[:10])
+    return df
 
 if __name__ == '__main__':
     folder = 'snap'
     tweets = clean_pipeline('../../tweets/{}'.format(folder))
-    df = pd.DataFrame(tweets, columns=['tweets', 'dates'])
-    df['dates'] = df['dates'].map(lambda x: str(x)[:10])

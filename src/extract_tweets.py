@@ -4,12 +4,19 @@ import tweepy
 import pickle
 import time
 
-
-consumer_key = os.environ['TWITTER_KEY']
-consumer_secret = os.environ['TWITTER_SECRET']
-access_token = os.environ['TWITTER_AT']
-access_secret = os.environ['TWITTER_TS']
-
+try:
+    consumer_key = os.environ['TWITTER_KEY']
+    consumer_secret = os.environ['TWITTER_SECRET']
+    access_token = os.environ['TWITTER_AT']
+    access_secret = os.environ['TWITTER_TS']
+except:
+    import json
+    with open('../../twitter.json') as key_file:
+        keys = json.load(key_file)
+        consumer_key = keys['TWITTER_KEY']
+        consumer_secret = keys['TWITTER_SECRET']
+        access_token = keys['TWITTER_AT']
+        access_secret = keys['TWITTER_TS']
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
@@ -42,4 +49,4 @@ def get_tweets(topics, save_file_name, num_batches=25):
 
 
 if __name__ == '__main__':
-    tweets = get_tweets(['snapchat'], '../../tweets/snap/snap0308', 1)
+    tweets = get_tweets(['ncaa', 'guinness'], '../../tweets/snap/snap0308', 10)
