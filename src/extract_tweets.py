@@ -45,9 +45,3 @@ def get_tweets(topics, save_file_name, num_batches=25):
     pickle.dump( tweets, open( "{}.pkl".format(save_file_name), "wb" ) )
     print 'Succesfully pickled', len(tweets), 'tweets!'
     return tweets
-
-
-
-if __name__ == '__main__':
-    date = time.strftime("%m-%d-%Y--%H-%M")
-    tweets = get_tweets(['ncaa', 'guinness'], '../../tweets/tweets-{}'.format(date), 10)
