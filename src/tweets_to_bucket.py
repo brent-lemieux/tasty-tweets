@@ -16,7 +16,7 @@ def to_bucket():
         access_key = keys["AWS_ACCESS_KEY_ID"]
         access_secret_key = keys["AWS_SECRET_ACCESS_KEY"]
 
-    file_name = '~/tweets/{}'.format(os.listdir('../../tweets')[0])
+    file_name = '../../tweets/{}'.format(os.listdir('../../tweets')[0])
     bucket_name = "tasty-tweets"
     fil = open(file_name)
     conn = boto.connect_s3(access_key,access_secret_key)
@@ -30,3 +30,6 @@ def to_bucket():
     #result contains the size of the file uploaded
 
     os.remove(file_name)
+
+if __name__ == '__main__':
+    to_bucket()
