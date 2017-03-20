@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import boto
 from boto.s3.key import Key
 import os
@@ -17,7 +19,7 @@ def to_bucket():
         access_secret_key = keys["AWS_SECRET_ACCESS_KEY"]
 
     file_name = '../../tweets/{}'.format(os.listdir('../../tweets')[0])
-    bucket_name = "tasty-tweets/tweets"
+    bucket_name = "tasty-tweets"
     fil = open(file_name)
     conn = boto.connect_s3(access_key,access_secret_key)
     bucket = conn.get_bucket(bucket_name)
