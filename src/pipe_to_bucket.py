@@ -5,11 +5,8 @@ import time
 
 
 
-
-
-
 if __name__ == '__main__':
     date = time.strftime("%m-%d-%Y--%H-%M")
     topics = ['chipotle']
-    get_tweets(topics, '../../tweets/tweets-{}'.format(date), 1)
+    get_tweets(topics, '/home/ubuntu/tweets/tweets-{}'.format(date), 1)
     to_bucket()
