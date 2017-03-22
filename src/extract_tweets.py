@@ -11,7 +11,7 @@ try:
     access_secret = os.environ['TWITTER_TS']
 except:
     import json
-    with open('../../twitter.json') as key_file:
+    with open('/home/ubuntu/twitter.json') as key_file:
         keys = json.load(key_file)
         consumer_key = keys['TWITTER_KEY']
         consumer_secret = keys['TWITTER_SECRET']

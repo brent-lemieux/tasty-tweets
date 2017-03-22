@@ -10,7 +10,7 @@ import os
 
 import json
 
-with open('../../amazon.json') as key_file:
+with open('/home/ubuntu/amazon.json') as key_file:
     keys = json.load(key_file)
     access_key = keys["AWS_ACCESS_KEY_ID"]
     access_secret_key = keys["AWS_SECRET_ACCESS_KEY"]
@@ -29,7 +29,7 @@ def to_bucket():
     #Upload the file
     result = k.set_contents_from_file(fil)
     #result contains the size of the file uploaded
-    # os.remove(file_name)
+    os.remove(file_name)
 
 if __name__ == '__main__':
     to_bucket()
