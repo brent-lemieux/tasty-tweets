@@ -17,7 +17,7 @@ with open('/home/ubuntu/amazon.json') as key_file:
 
 def to_bucket():
     file_name = '/home/ubuntu/tweets/{}'.format(os.listdir('/home/ubuntu/tweets')[0])
-    print (file_name)
+    print file_name
     bucket_name = "tasty-tweets"
     fil = open(file_name)
     conn = boto.connect_s3(access_key, access_secret_key)

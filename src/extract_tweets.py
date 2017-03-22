@@ -32,16 +32,16 @@ def get_tweets(topics, save_file_name, num_batches=25):
     for i in xrange(num_batches):
         for topic in topics:
             try:
-                print ('Loading', i+1, 'of', num_batches, 'batches of', topic, 'tweets')
+                print 'Loading', i+1, 'of', num_batches, 'batches of', topic, 'tweets'
                 for tweet in tweepy.Cursor(api.search, q=topic).items(100):
                     if tweet.lang == 'en':
                         tweets.add((tweet.text, tweet.created_at))
                 time.sleep(35)
             except:
-                print ('Waiting for API to allow more calls...')
+                print 'Waiting for API to allow more calls...'
                 time.sleep(10)
                 pass
     tweets = list(tweets)
     pickle.dump( tweets, open( "{}.pkl".format(save_file_name), "wb" ) )
-    print ('Succesfully pickled', len(tweets), 'tweets!')
+    print 'Succesfully pickled', len(tweets), 'tweets!'
     return tweets
