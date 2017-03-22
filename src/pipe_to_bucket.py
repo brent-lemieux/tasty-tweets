@@ -1,3 +1,9 @@
+import pip
+
+pip.main(['install', 'tweepy'])
+pip.main(['install', 'boto'])
+
+
 from extract_tweets import get_tweets
 from tweets_to_bucket import to_bucket
 import time
