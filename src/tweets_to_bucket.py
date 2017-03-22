@@ -12,13 +12,13 @@ import os
 
 import json
 
-def to_bucket():
-    with open('../../amazon.json') as key_file:
-        keys = json.load(key_file)
-        access_key = keys["AWS_ACCESS_KEY_ID"]
-        access_secret_key = keys["AWS_SECRET_ACCESS_KEY"]
+with open('../../amazon.json') as key_file:
+    keys = json.load(key_file)
+    access_key = keys["AWS_ACCESS_KEY_ID"]
+    access_secret_key = keys["AWS_SECRET_ACCESS_KEY"]
 
-    file_name = '/../../tweets/{}'.format(os.listdir('/../../tweets')[0])
+def to_bucket():
+    file_name = '../../tweets/{}'.format(os.listdir('../../tweets')[0])
     bucket_name = "tasty-tweets"
     fil = open(file_name)
     conn = boto.connect_s3(access_key,access_secret_key)
