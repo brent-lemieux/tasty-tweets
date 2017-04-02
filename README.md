@@ -27,7 +27,7 @@ I collected tweets for over a month, Jan. 27 through Feb. 28 of 2017, with the k
 
 ### Starbucks
 #### Refugee Hiring Announcement
-Starbucks was in the news quite a bit during the period I was collecting data.  On January 31, 2017 they announced that their plan to hire 10,000 refugees over the next five years.  Of course, in this day in age, this was quickly politicized.  
+Starbucks was in the news quite a bit during the period I was collecting data.  On January 31, 2017 they announced their plan to hire 10,000 refugees over the next five years.  Of course, in this day in age, this was quickly politicized.  
 
 Here is a word cloud of the most frequently used words for tweets that fall into the "refugee hiring" topic:
 

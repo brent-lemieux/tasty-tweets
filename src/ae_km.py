@@ -17,21 +17,25 @@ from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
-class Cluster():
+class Cluster:
+    '''Pipeline that takes in a dataframe of tweets and dates and return
+    cluster (or topic) labels'''
     def __init__(self, tweet_df, k):
         self.tweets = tweet_df['tweets'].values
-        self.dates = tweet_df['dates'].values
+        self.dates = tweet_df['date'].values
         self.k = k
         self.tfidf = None
         self.encoder = None
 
     def vectorize(self, ngram_range=[1,2], min_df=0.001):
+        '''Apply tfidf vectorizer to corpus of tweets'''
         tfidf = TfidfVectorizer(stop_words='english', ngram_range=ngram_range, min_df=min_df)
-        vecs = tfidf.fit_transform(self.tweets)
+        vecs = tfidf.fit_transform(self.tweets).todense()
         self.tfidf = tfidf
         return vecs
 
     def encode(self, vecs, architecture=[60,30,60], activations=['tanh', 'sigmoid'], loss='binary_crossentropy'):
+        '''Use autoencoder to reduce feature space of tweet corpus'''
         train = vecs[5000:,:]
         test = vecs[:5000,:]
         input_cols = test.shape[1]
@@ -61,9 +65,15 @@ class Cluster():
         return encoded_tweets
 
     def kmeans(self):
+        '''Use k-means to identify tweet clusters'''
         vecs = self.vectorize()
         encoded = self.encode(vecs)
         km = KMeans(n_clusters=self.k)
         labels = km.fit_transform(encoded).labels_
         self.km = km
         return labels
+
+if __name__ == '__main__':
+    df = pd.read_csv('../../archived-tweets/csv/clean_master.csv')
+    cluster = Cluster(df, 10)
+    labs = cluster.kmeans()
