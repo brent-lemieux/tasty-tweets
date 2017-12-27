@@ -1,0 +1,13 @@
+**/data
+**/models
+**/final_plots
+**/exploratory_plots
+**/plot_data
+**/stock_data
+
+*.png
+*.pyc
+*.json
+*.pkl
+*.txt
+*.DS_Store
